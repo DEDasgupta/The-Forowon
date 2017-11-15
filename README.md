@@ -8,6 +8,8 @@ We are using the Isogenic game engine: http://www.isogenicengine.com/
 
 Install nodeJS and npm (make sure npm is accessible by command line)
 
+download the isogenic game engine, move the ige folder into this directory
+
 from this directory in the command line/terminal:
 
 run the command "npm install"
