@@ -9,7 +9,9 @@ please follow their tutorials and look at the examples in the engine to learn ho
 
 Install nodeJS and npm (make sure npm is accessible by command line)
 
-from this directory in the command line/terminal:
+Navigate to ige/server. Then do "npm install"
+
+Go back to root directory in the command line/terminal:
 
 run the command "npm install"
 
