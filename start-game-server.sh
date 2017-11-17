@@ -1,1 +1,1 @@
-node ../ige/server/ige.js --hot -g .
+node ./ige/server/ige.js --hot -g .
