@@ -19,7 +19,8 @@ var Client = IgeClass.extend({
 
 		// Load the textures we want to use
 		this.textures = {
-			ship: new IgeTexture('./assets/PlayerTexture.js')
+			ship: new IgeTexture('./assets/PlayerTexture.js'),
+			gameGrid: new IgeTexture('./assets/GameGridTexture.js')
 		};
 
 		ige.on('texturesLoaded', function () {
@@ -46,8 +47,13 @@ var Client = IgeClass.extend({
 
 							});
 
+						ige.addGraph('IgeBaseScene');
+						var baseScene = ige.$('baseScene')
+						
 						self.mainScene = new IgeScene2d()
-							.id('mainScene');
+							.id('mainScene')
+							.mount(baseScene);
+
 
 						// Create the scene
 						self.scene1 = new IgeScene2d()
@@ -77,86 +83,6 @@ var Client = IgeClass.extend({
 							'bottom': 0
 						});
 						
-						ige.ui.style('#main', {
-							'backgroundColor': '#ffffff',
-							'left': 225,
-							'right': 0,
-							'top': 42,
-							'bottom': 0
-						});
-						
-						ige.ui.style('#logo', {
-							'backgroundRepeat': 'no-repeat',
-							'middle': 0,
-							'left': 20,
-							'width': 86,
-							'height': 14
-						});
-						
-						ige.ui.style('.title', {
-							'font': '3em Open Sans',
-							'color': '#666666',
-							'width': 200,
-							'height': 40,
-							'top': 10,
-							'left': 10
-						});
-						
-						ige.ui.style('.subTitle', {
-							'font': 'lighter 16px Open Sans',
-							'color': '#666666',
-							'width': 400,
-							'height': 40,
-							'top': 40,
-							'left': 11
-						});
-						
-						ige.ui.style('IgeUiTextBox', {
-							'backgroundColor': '#ffffff',
-							'borderColor': '#212121',
-							'borderWidth': 1,
-							'bottom': null,
-							'right': null,
-							'width': 300,
-							'height': 30,
-							'left': 15,
-							'font': '12px Open Sans',
-							'color': '#000000'
-						});
-						
-						ige.ui.style('#textBox1', {
-							'top': 140
-						});
-						
-						ige.ui.style('#textBox2', {
-							'top': 180
-						});
-						
-						ige.ui.style('#textBox1:focus', {
-							'borderColor': '#00ff00'
-						});
-						
-						ige.ui.style('#textBox2:focus', {
-							'borderColor': '#00ff00'
-						});
-						
-						ige.ui.style('#dashBar', {
-							'backgroundColor': '#eeeeee',
-							'top': 80,
-							'left': 15,
-							'right': 15,
-							'height': 40
-						});
-						
-						ige.ui.style('IgeUiLabel', {
-							'font': '12px Open Sans',
-							'color': '#000000'
-						});
-						
-						ige.ui.style('#homeLabel', {
-							'font': '14px Open Sans',
-							'color': '#333333'
-						});
 						
 						ige.ui.style('#button1', {
 							'width': 80,
@@ -165,21 +91,21 @@ var Client = IgeClass.extend({
 							'left': 15,
 							'backgroundColor': '#ccc'
 						});
+						ige.ui.style('#button2', {
+							'width': 80,
+							'height': 30,
+							'top': 260,
+							'left': 15,
+							'backgroundColor': '#ccc'
+						});
 						
 						var topNav = new IgeUiElement()
 							.id('topNav')
 							.mount(self.uiScene);
 						
-						new IgeUiElement()
-							.id('logo')
-							.mount(topNav);
-						
 						var leftNav = new IgeUiElement()
 							.id('leftNav')
 							.mount(self.uiScene);
-						
-						var main = new IgeUiElement()
-							.id('main');
 						
 						new IgeUiDropDown()
 							.id('optionsDropDown')
@@ -198,69 +124,33 @@ var Client = IgeClass.extend({
 							}])
 							.mount(leftNav);
 
-						new IgeUiLabel()
-							.value('Dashboard')
-							.styleClass('title')
-							.mount(main);
-						
-						new IgeUiLabel()
-							.value('Login with your username and password')
-							.styleClass('subTitle')
-							.mount(main);
-						
-						var dashBar = new IgeUiElement()
-							.id('dashBar')
-							.mount(main);
-						
-						new IgeUiLabel()
-							.id('homeLabel')
-							.value('Home')
-							.width(100)
-							.height(40)
-							.left(0)
-							.top(0)
-							.mount(dashBar);
-						
-						new IgeUiTextBox()
-							.id('textBox1')
-							.value('')
-							.placeHolder('Username')
-							.placeHolderColor('#989898')
-							.mount(main);
-						
-						new IgeUiTextBox()
-							.id('textBox2')
-							.value('')
-							.mask('*')
-							.placeHolder('Password')
-							.placeHolderColor('#989898')
-							.mount(main);
-						
-						var button = new IgeUiButton()
+						var upButton = new IgeUiButton()
 							.id('button1')
-							.value('throw alert')
+							.value('moveUp')
 							.mount(leftNav);
-							button._mouseUp = function(){alert("hi");}
+							upButton._mouseUp = function(){
+								ige.network.send('moveUp', {data:"hihi"})
+							}
 
-						self.grid = new IgeTileMap2d()
-							.id('tilegrid')
-							.gridSize(5,5)
-							.drawGrid(true)
-							.tileHeight(80)
-							.tileWidth(80)
-							.translateTo(-300,-300,0)
-							.drawBounds(true)
-							.mount(self.scene1)
+						var downButton = new IgeUiButton()
+							.id('button2')
+							.value('moveDown')
+							.mount(leftNav);
+							downButton._mouseUp = function(){
+								ige.network.send('moveDown', {data:"hihi"})
+							}
+
+						
 
 						// Create the main viewport and set the scene
 						// it will "look" at as the new scene1 we just
 						// created above
-						self.vp1 = new IgeViewport()
-							.id('vp1')
+						/*self.vp2 = new IgeViewport()
+							.id('vp2')
 							.autoSize(true)
-							.scene(self.mainScene)
+							.scene(baseScene)
 							.drawBounds(true)
-							.mount(ige);
+							.mount(ige);*/
 
 						// Define our player controls
 						ige.input.mapAction('left', ige.input.key.left);
@@ -314,14 +204,18 @@ var Client = IgeClass.extend({
 						ige.watchStart(self.custom2);
 						ige.watchStart(self.custom3);
 						ige.watchStart(self.custom4);
-
+						
 						var playerMessage = function(data){
 							ige.log("log")
 							console.log(data)
 						}
-						ige.network.define('player_message', playerMessage);
 
-						ige.network.send('player_message', {data:"hihi"})
+						ige.network.define('moveUp', playerMessage);
+						ige.network.define('moveDown', playerMessage);
+						ige.network.define('moveLeft', playerMessage);
+						ige.network.define('moveDown', playerMessage);
+
+						//ige.network.send('player_message', {data:"hihi"})
 					});
 				}
 			});

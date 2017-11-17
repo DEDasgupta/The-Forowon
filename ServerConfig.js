@@ -1,7 +1,9 @@
 var config = {
 	include: [
 		{name: 'ServerNetworkEvents', path: './gameClasses/ServerNetworkEvents'},
-		{name: 'Player', path: './gameClasses/Player'}
+		{name: 'Player', path: './gameClasses/Player'},
+		{name: 'ExampleEntity', path: './gameClasses/ExampleEntity'},
+		{name: 'GameGrid', path: './gameClasses/GameGrid'}
 	]
 };
 

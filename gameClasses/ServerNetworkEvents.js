@@ -22,7 +22,26 @@ var ServerNetworkEvents = {
 			delete ige.server.players[clientId];
 		}
 	},
-	_playerMessage: function(data, clientid){
+	_moveUp: function(data, clientid){
+		ige.server.exampleEntity._translate.tween().stepBy({x:0,y:-100},2000).start();
+		ige.log("log")
+		console.log(clientid)
+		console.log(data)
+	},
+	_moveDown: function(data, clientid){
+		ige.server.exampleEntity._translate.tween().stepBy({x:0,y:100},2000).start();
+		ige.log("log")
+		console.log(clientid)
+		console.log(data)
+	},
+	_moveLeft: function(data, clientid){
+		ige.server.exampleEntity._translate.tween().stepBy({x:-100,y:0},2000).start();
+		ige.log("log")
+		console.log(clientid)
+		console.log(data)
+	},
+	_moveRight: function(data, clientid){
+		ige.server.exampleEntity._translate.tween().stepBy({x:100,y:-100},2000).start();
 		ige.log("log")
 		console.log(clientid)
 		console.log(data)
