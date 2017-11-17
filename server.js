@@ -12,14 +12,28 @@ var Server = IgeClass.extend({
 		// Add the server-side game methods / event handlers
 		this.implement(ServerNetworkEvents);
 
+		//function to be called by client
+		var playerMessage = function(data, clientid){
+			ige.log("log")
+			console.log(clientid)
+			console.log(data)
+		}
+		
+
 		// Add the networking component
 		ige.addComponent(IgeNetIoComponent)
+
+			//define function called by player
+			
+
 			// Start the network server
 			.network.start(2000, function () {
 				// Networking has started so start the game engine
 				ige.start(function (success) {
 					// Check if the engine started successfully
 					if (success) {
+						//ige.chat.createRoom('The Lobby', {}, 'lobby');
+						ige.network.define('player_message', self._playerMessage)
 						// Create some network commands we will need
 						ige.network.define('playerEntity', self._onPlayerEntity);
 
@@ -60,6 +74,9 @@ var Server = IgeClass.extend({
 							.scene(self.mainScene)
 							.drawBounds(true)
 							.mount(ige);
+						
+						
+							
 					}
 				});
 			});

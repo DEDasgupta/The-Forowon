@@ -22,6 +22,11 @@ var ServerNetworkEvents = {
 			delete ige.server.players[clientId];
 		}
 	},
+	_playerMessage: function(data, clientid){
+		ige.log("log")
+		console.log(clientid)
+		console.log(data)
+	},
 
 	_onPlayerEntity: function (data, clientId) {
 		if (!ige.server.players[clientId]) {

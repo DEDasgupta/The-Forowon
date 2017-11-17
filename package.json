@@ -1,0 +1,9 @@
+{
+  "name": "forowon-clue-less",
+  "version": "0.0.1",
+  "description": "A sample Node.js app using Express 4",
+  "dependencies": {
+    "webpack": "^2.2.0",
+    "webpack-dev-server": "^2.9.0"
+  }
+}
