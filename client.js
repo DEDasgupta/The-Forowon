@@ -84,21 +84,48 @@ var Client = IgeClass.extend({
 						});
 						
 						
-						ige.ui.style('#button1', {
+						ige.ui.style('#button3', {
 							'width': 80,
 							'height': 30,
-							'top': 220,
+							'top': 180,
 							'left': 15,
 							'backgroundColor': '#ccc'
 						});
-						ige.ui.style('#button2', {
+						ige.ui.style('#button1', {
 							'width': 80,
 							'height': 30,
 							'top': 260,
 							'left': 15,
 							'backgroundColor': '#ccc'
 						});
+						ige.ui.style('#button2', {
+							'width': 80,
+							'height': 30,
+							'top': 300,
+							'left': 15,
+							'backgroundColor': '#ccc'
+						});
+
+						ige.ui.style('IgeUiTextBox', {
+							'backgroundColor': '#ffffff',
+							'borderColor': '#212121',
+							'borderWidth': 1,
+							'bottom': null,
+							'right': null,
+							'width': 200,
+							'height': 30,
+							'left': 15,
+							'font': '12px Open Sans',
+							'color': '#000000'
+						});
+						ige.ui.style('#textBox1', {
+							'top': 140
+						});
 						
+						ige.ui.style('#textBox1:focus', {
+							'borderColor': '#00ff00'
+						});
+
 						var topNav = new IgeUiElement()
 							.id('topNav')
 							.mount(self.uiScene);
@@ -140,6 +167,19 @@ var Client = IgeClass.extend({
 								ige.network.send('moveDown', {data:"hihi"})
 							}
 
+						var commandText = new IgeUiTextBox()
+							.id('textBox1')
+							.value('')
+							.mount(leftNav);
+
+						/* This Button send the command to the server */
+						var sendButton = new IgeUiButton()
+							.id('button3')
+							.value('Send')
+							.mount(leftNav);
+							sendButton._mouseUp = function(){
+								ige.network.send('moveDown', commandText.value)
+							}
 						
 
 						// Create the main viewport and set the scene
