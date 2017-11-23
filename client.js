@@ -8,6 +8,8 @@ var Client = IgeClass.extend({
 		// Load our textures
 		var self = this;
 
+		this.clientCharacter = "";
+
 		// Enable networking
 		ige.addComponent(IgeNetIoComponent);
 
@@ -48,13 +50,8 @@ var Client = IgeClass.extend({
 
 							});
 
+						ige.network.request("Available", name, self._onCharacterAvailable);
 
-						var name=prompt("Please enter your character. The list of characters:\n   Miss Scarlet\n   Col. Mustard\n   Mrs. White\n   Mr. Green\n   Mrs. Peacock\n   Prof Plum","");
-					    if (name!=null || name!= "" || name!= undefined){
-							/*Register for character name here */
-							this.character = name;
-							ige.network.request("Register", name, self._onRegisterCharacter);
-					    }
 
 						ige.addGraph('IgeBaseScene');
 						var baseScene = ige.$('baseScene')
@@ -206,9 +203,6 @@ var Client = IgeClass.extend({
 						ige.input.mapAction('right', ige.input.key.right);
 						ige.input.mapAction('thrust', ige.input.key.up);
 
-						// Ask the server to create an entity for us
-						//ige.network.send('playerEntity');
-
 						// We don't create any entities here because in this example the entities
 						// are created server-side and then streamed to the clients. If an entity
 						// is streamed to a client and the client doesn't have the entity in
@@ -271,15 +265,17 @@ var Client = IgeClass.extend({
 		});
 	},
 
-	_onRegisterCharacter: function (cmd, data) {
-		if (data == "False")
-		{
-		    var name=prompt("The character is invalid or already taken. Please choose another one.\nThe list of characters:\n   Miss Scarlet\n   Col. Mustard\n   Mrs. White\n   Mr. Green\n   Mrs. Peacock\n   Prof Plum","");
-		    if (name!=null || name!= "" || name!= undefined){
-				/*Register for character name here */
-				ige.network.request('Register', name, self._onRegisterCharacter);
-		    }
-		}
+	_onCharacterAvailable: function (cmd, data) {
+		var name = "";
+		//name=prompt("Please enter your character. The list of characters:\n" + data,"");
+
+		do {
+			name = prompt("Please enter your character. The list of characters:\n" + data,"");
+	    } while (name == null || name == "" || name == undefined);
+
+		/*Register for character name here */
+		ige.network.request('Register', name, self.ClientNetworkEvents._onRegisterCharacter);
+		ige.client.clientCharacter = name;
 	}
 });
 

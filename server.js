@@ -9,15 +9,25 @@ var Server = IgeClass.extend({
 
 		// Define an object to hold references to our player entities
 		this.players = {};
-
+		this.playersMap = {};
+		this.playerList= {};
 		this.characterSet = new Array(5).fill(false);
 		this.numOfPlayers = 0;
+		this.characterShortNames = ["Scarlet", "Mustard", "White", "Green", "Peacock", "Plum"];
+		this.characterNames = ["Miss Scarlet", "Col. Mustard", "Mrs. White", "Mr. Green", "Mrs. Peacock", "Prof Plum"];
 
 		// Add the server-side game methods / event handlers
 		this.implement(ServerNetworkEvents);
-
-		//function to be called by client
 		
+		//function to be called by client
+		/*
+		var playerMessage = function(data, clientid){
+			console.log(self.exampleEntity)
+			self.exampleEntity._translate.tween().stepBy({x:100,y:100},1000)
+			ige.log("log")
+			console.log(clientid)
+			console.log(data)
+		}*/
 
 		// Add the networking component
 		ige.addComponent(IgeNetIoComponent)
@@ -49,6 +59,7 @@ var Server = IgeClass.extend({
 						ige.network.define('playerControlThrustUp', self._onPlayerThrustUp);
 
 						ige.network.define('Register', self._onPlayerRegister);
+						ige.network.define('Available', self._onPlayerAvailable);
 
 						ige.network.on('connect', self._onPlayerConnect); // Defined in ./gameClasses/ServerNetworkEvents.js
 						ige.network.on('disconnect', self._onPlayerDisconnect); // Defined in ./gameClasses/ServerNetworkEvents.js
@@ -75,32 +86,38 @@ var Server = IgeClass.extend({
 							.streamMode(1)
 							.mount(baseScene);
 							
-						self.Scarlet = new Player()
+						// Scarlet
+						self.playerList[0] = new Player()
 							.id('Scarlet')
 							.streamMode(1)
 							.mount(baseScene);
-													
-						self.Mustard = new Player()
+								
+						// Mustard					
+						self.playerList[1] = new Player()
 							.id('Mustard')
 							.streamMode(1)
 							.mount(baseScene);		
 
-						self.White = new Player()
+						// White
+						self.playerList[2] = new Player()
 							.id('White')
 							.streamMode(1)
 							.mount(baseScene);				
 
-						self.Green = new Player()
+						// Green
+						self.playerList[3] = new Player()
 							.id('Green')
 							.streamMode(1)
 							.mount(baseScene);				
 
-						self.Peacock = new Player()
+						// Peacock
+						self.playerList[4] = new Player()
 							.id('Peacock')
 							.streamMode(1)
 							.mount(baseScene);				
 
-						self.Plum = new Player()
+						// Plum
+						self.playerList[5] = new Player()
 							.id('Plum')
 							.streamMode(1)
 							.mount(baseScene);

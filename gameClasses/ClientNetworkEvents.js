@@ -39,6 +39,25 @@ var ClientNetworkEvents = {
 				}
 			});
 		}
+	},
+
+	_onRegisterCharacter: function (cmd, data) {
+		if (data != "True")
+		{
+			var name = "";
+			do {
+		    	name = prompt("The character is invalid or already taken. Please choose another one.\nThe list of characters:\n " + data,"");
+		    } while (name ==null || name == "" || name == undefined);
+
+			/*Register for character name here */
+			ige.network.request('Register', name, this._onRegisterCharacter);
+			ige.client.clientCharacter = name;
+		}
+		else
+		{
+			// Ask the server to create an entity for us
+			ige.network.request('playerEntity', ige.client.clientCharacter, self.ClientNetworkEvents._onPlayerEntity);
+		}
 	}
 };
 

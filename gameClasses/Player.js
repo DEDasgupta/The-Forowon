@@ -8,6 +8,8 @@ var Player = IgeEntity.extend({
 
 		this.drawBounds(false);
 
+		this.initialize = true;
+
 		// Rotate to point upwards
 		this.controls = {
 			left: false,
@@ -17,6 +19,8 @@ var Player = IgeEntity.extend({
 
 		if (ige.isServer) {
 			this.addComponent(IgeVelocityComponent);
+			this._bounds2d.x2 = -100;
+			this._bounds2d.y2 = -200;
 		}
 
 		if (ige.isClient) {
