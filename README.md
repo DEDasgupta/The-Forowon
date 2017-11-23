@@ -19,3 +19,10 @@ run start-game-server.sh
 
 run start-web-server.sh
 
+## Startup Instructions
+
+Open the chrome at http://localhost:8080/
+
+The pop-up window will display to enter the character name. There's lit of available characters from the server
+
+The character name can be short or full. For example: "Miss Scarlet" or "Scarlet" are both acceptable
