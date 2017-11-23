@@ -49,16 +49,19 @@ var ServerNetworkEvents = {
 
 	_onPlayerEntity: function (data, clientId) {
 		if (!ige.server.players[clientId]) {
-			ige.server.players[clientId] = new Player(clientId)
+			console.log("_onPlayerEntity ", clientId);
+			/*ige.server.players[clientId] = new Player(clientId)
 				.streamMode(1)
 				.mount(ige.server.scene1);
 
 			// Tell the client to track their player entity
-			ige.network.send('playerEntity', ige.server.players[clientId].id(), clientId);
+			ige.network.send('playerEntity', ige.server.players[clientId].id(), clientId);*/
 		}
 	},
 
 	_onPlayerLeftDown: function (data, clientId) {
+
+		console.log("_onPlayerEntity ", clientId);
 		ige.server.players[clientId].controls.left = true;
 	},
 
@@ -80,6 +83,67 @@ var ServerNetworkEvents = {
 
 	_onPlayerThrustUp: function (data, clientId) {
 		ige.server.players[clientId].controls.thrust = false;
+	},
+
+	_onPlayerRegister: function (data, clientId, requestId) {
+		console.log('_onPlayerRegister', "get in");
+		var success = false;
+		switch (data)
+		{
+			case "Miss Scarlet":
+				if (ige.server.characterSet[0] == false)
+				{
+					success = true;
+					ige.server.characterSet[0] = true;
+				}
+				break;
+			case "Col. Mustard":
+				if (ige.server.characterSet[1] == false)
+				{
+					success = true;
+					ige.server.characterSet[1] = true;
+				}
+				break;
+			case "Mrs. White":
+				if (ige.server.characterSet[2] == false)
+				{
+					success = true;
+					ige.server.characterSet[2] = true;
+				}
+				break;
+			case  "Mr. Green":
+				if (ige.server.characterSet[3] == false)
+				{
+					success = true;
+					ige.server.characterSet[3] = true;
+				}
+				break;
+			case "Mrs. Peacock":
+				if (ige.server.characterSet[4] == false)
+				{
+					success = true;
+					ige.server.characterSet[4] = true;
+				}
+				break;
+			case "Prof Plum":
+				if (ige.server.characterSet[5] == false)
+				{
+					success = true;
+					ige.server.characterSet[5] = true;
+				}
+				break;
+			default:
+				break;
+		}
+		if (success == true)
+		{
+			ige.network.response(requestId, 'True');
+		}
+		else
+		{
+			ige.network.response(requestId, 'False');
+		}
+		console.log("_onPlayerRegister", "Register " + data);
 	}
 };
 

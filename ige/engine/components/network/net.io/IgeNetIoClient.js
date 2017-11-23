@@ -156,11 +156,12 @@ var IgeNetIoClient = {
 				console.log('Sending "' + commandName + '" (index ' + commandIndex + ') with data:', data);
 				this._debugCounter++;
 			}
-			ciEncoded = String.fromCharCode(commandIndex);
-			this._io.send([ciEncoded, data]);
 		} else {
-			this.log('Cannot send network packet with command "' + commandName + '" because the command has not been defined!', 'error');
+			console.log('Cannot send network packet with command "' + commandName + '" because the command has not been defined!', 'error');
 		}
+
+		ciEncoded = String.fromCharCode(commandIndex);
+		this._io.send([ciEncoded, data]);
 	},
 
 	/**

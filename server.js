@@ -1,3 +1,4 @@
+
 var Server = IgeClass.extend({
 	classId: 'Server',
 	Server: true,
@@ -9,17 +10,13 @@ var Server = IgeClass.extend({
 		// Define an object to hold references to our player entities
 		this.players = {};
 
+		this.characterSet = new Array(5).fill(false);
+		this.numOfPlayers = 0;
+
 		// Add the server-side game methods / event handlers
 		this.implement(ServerNetworkEvents);
 
 		//function to be called by client
-		var playerMessage = function(data, clientid){
-			console.log(self.exampleEntity)
-			self.exampleEntity._translate.tween().stepBy({x:100,y:100},1000)
-			ige.log("log")
-			console.log(clientid)
-			console.log(data)
-		}
 		
 
 		// Add the networking component
@@ -51,6 +48,8 @@ var Server = IgeClass.extend({
 						ige.network.define('playerControlRightUp', self._onPlayerRightUp);
 						ige.network.define('playerControlThrustUp', self._onPlayerThrustUp);
 
+						ige.network.define('Register', self._onPlayerRegister);
+
 						ige.network.on('connect', self._onPlayerConnect); // Defined in ./gameClasses/ServerNetworkEvents.js
 						ige.network.on('disconnect', self._onPlayerDisconnect); // Defined in ./gameClasses/ServerNetworkEvents.js
 
@@ -76,11 +75,36 @@ var Server = IgeClass.extend({
 							.streamMode(1)
 							.mount(baseScene);
 							
-						self.exampleEntity = new ExampleEntity()
-							.id('example1')
+						self.Scarlet = new Player()
+							.id('Scarlet')
 							.streamMode(1)
 							.mount(baseScene);
-						
+													
+						self.Mustard = new Player()
+							.id('Mustard')
+							.streamMode(1)
+							.mount(baseScene);		
+
+						self.White = new Player()
+							.id('White')
+							.streamMode(1)
+							.mount(baseScene);				
+
+						self.Green = new Player()
+							.id('Green')
+							.streamMode(1)
+							.mount(baseScene);				
+
+						self.Peacock = new Player()
+							.id('Peacock')
+							.streamMode(1)
+							.mount(baseScene);				
+
+						self.Plum = new Player()
+							.id('Plum')
+							.streamMode(1)
+							.mount(baseScene);
+
 						// Create the scene
 						self.mainScene = new IgeScene2d()
 							.id('mainScene')

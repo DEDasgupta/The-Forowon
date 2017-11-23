@@ -33,6 +33,7 @@ var Client = IgeClass.extend({
 					// than before the scene etc are created... maybe you want
 					// a splash screen or a menu first? Then connect after you've
 					// got a username or something?
+
 					ige.network.start('http://localhost:2000', function () {
 						// Setup the network command listeners
 						ige.network.define('playerEntity', self._onPlayerEntity); // Defined in ./gameClasses/ClientNetworkEvents.js
@@ -46,6 +47,14 @@ var Client = IgeClass.extend({
 								self.log('Stream entity created with ID: ' + entity.id());
 
 							});
+
+
+						var name=prompt("Please enter your character. The list of characters:\n   Miss Scarlet\n   Col. Mustard\n   Mrs. White\n   Mr. Green\n   Mrs. Peacock\n   Prof Plum","");
+					    if (name!=null || name!= "" || name!= undefined){
+							/*Register for character name here */
+							this.character = name;
+							ige.network.request("Register", name, self._onRegisterCharacter);
+					    }
 
 						ige.addGraph('IgeBaseScene');
 						var baseScene = ige.$('baseScene')
@@ -178,7 +187,7 @@ var Client = IgeClass.extend({
 							.value('Send')
 							.mount(leftNav);
 							sendButton._mouseUp = function(){
-								ige.network.send('moveDown', commandText.value)
+								ige.network.send(commandText.value, {data:"hihi"})
 							}
 						
 
@@ -198,7 +207,7 @@ var Client = IgeClass.extend({
 						ige.input.mapAction('thrust', ige.input.key.up);
 
 						// Ask the server to create an entity for us
-						ige.network.send('playerEntity');
+						//ige.network.send('playerEntity');
 
 						// We don't create any entities here because in this example the entities
 						// are created server-side and then streamed to the clients. If an entity
@@ -260,6 +269,17 @@ var Client = IgeClass.extend({
 				}
 			});
 		});
+	},
+
+	_onRegisterCharacter: function (cmd, data) {
+		if (data == "False")
+		{
+		    var name=prompt("The character is invalid or already taken. Please choose another one.\nThe list of characters:\n   Miss Scarlet\n   Col. Mustard\n   Mrs. White\n   Mr. Green\n   Mrs. Peacock\n   Prof Plum","");
+		    if (name!=null || name!= "" || name!= undefined){
+				/*Register for character name here */
+				ige.network.request('Register', name, self._onRegisterCharacter);
+		    }
+		}
 	}
 });
 

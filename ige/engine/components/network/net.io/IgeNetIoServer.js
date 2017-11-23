@@ -360,6 +360,10 @@ var IgeNetIoServer = {
 		if (this._networkCommands[commandName]) {
 			this._networkCommands[commandName](data[1], clientId);
 		}
+		else
+		{
+			this._onCommandProcess(commandName, clientId);
+		}
 
 		this.emit(commandName, [data[1], clientId]);
 	},
@@ -377,6 +381,7 @@ var IgeNetIoServer = {
 			this._debugCounter++;
 		}
 
+		console.log('onRequest', data.cmd, [data.id, data.data]);
 		if (this._networkCommands[data.cmd]) {
 			this._networkCommands[data.cmd](data.data, clientId, data.id);
 		}
@@ -421,6 +426,24 @@ var IgeNetIoServer = {
 		this.clientLeaveAllRooms(socket.id);
 
 		delete this._socketById[socket.id];
+	},
+
+	_onCommandProcess: function (data, clientId)
+	{
+		var cmdProcess = new String(data);
+		console.log('_onCommandProcess', cmdProcess);
+		var s = cmdProcess.split(" ");
+		console.log('_onCommandProcess', s[0]);
+		console.log('_onCommandProcess', s[1]);
+		if (s[0] == "Register")
+		{
+
+			console.log('_onCommandProcess', "get in");
+			if (this._networkCommands[s[0]]) {
+				console.log('_onCommandProcess', "get in 2");
+				this._networkCommands[s[0]](s[1], clientId);
+			}
+		}
 	}
 };
 
