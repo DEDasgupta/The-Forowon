@@ -59,6 +59,7 @@ var ClientNetworkEvents = {
 			ige.network.request('playerEntity', ige.client.clientCharacter, self.ClientNetworkEvents._onPlayerEntity);
 		}
 	}
+	
 };
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = ClientNetworkEvents; }

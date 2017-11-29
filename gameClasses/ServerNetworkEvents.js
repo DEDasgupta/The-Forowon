@@ -28,25 +28,25 @@ var ServerNetworkEvents = {
 		}
 	},
 	_moveUp: function(data, clientId){
-		ige.server.players[clientId]._translate.tween().stepBy({x:0,y:-100},2000).start();
+		ige.server.players[clientId]._translate.tween().stepBy({x:0,y:-100},1000).start();
 		ige.log("log")
 		console.log(clientId)
 		console.log(data)
 	},
 	_moveDown: function(data, clientId){
-		ige.server.players[clientId]._translate.tween().stepBy({x:0,y:100},2000).start();
+		ige.server.players[clientId]._translate.tween().stepBy({x:0,y:100},1000).start();
 		ige.log("log")
 		console.log(clientId)
 		console.log(data)
 	},
 	_moveLeft: function(data, clientId){
-		ige.server.players[clientId]._translate.tween().stepBy({x:-100,y:0},2000).start();
+		ige.server.players[clientId]._translate.tween().stepBy({x:-130,y:0},1000).start();
 		ige.log("log")
 		console.log(clientId)
 		console.log(data)
 	},
 	_moveRight: function(data, clientId){
-		ige.server.players[clientId]._translate.tween().stepBy({x:100,y:-100},2000).start();
+		ige.server.players[clientId]._translate.tween().stepBy({x:130,y:0},1000).start();
 		ige.log("log")
 		console.log(clientId)
 		console.log(data)

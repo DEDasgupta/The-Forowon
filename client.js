@@ -97,18 +97,24 @@ var Client = IgeClass.extend({
 							'left': 15,
 							'backgroundColor': '#ccc'
 						});
-						ige.ui.style('#button1', {
-							'width': 80,
+						ige.ui.style('#up-button', {
+							'width': 50,
 							'height': 30,
-							'top': 260,
-							'left': 15,
 							'backgroundColor': '#ccc'
 						});
-						ige.ui.style('#button2', {
-							'width': 80,
+						ige.ui.style('#down-button', {
+							'width': 50,
 							'height': 30,
-							'top': 300,
-							'left': 15,
+							'backgroundColor': '#ccc'
+						});
+						ige.ui.style('#left-button', {
+							'width': 50,
+							'height': 30,
+							'backgroundColor': '#ccc'
+						});
+						ige.ui.style('#right-button', {
+							'width': 50,
+							'height': 30,
 							'backgroundColor': '#ccc'
 						});
 
@@ -158,18 +164,40 @@ var Client = IgeClass.extend({
 							.mount(leftNav);
 
 						var upButton = new IgeUiButton()
-							.id('button1')
-							.value('moveUp')
+							.id('up-button')
+							.top(260)
+							.value('Up')
 							.mount(leftNav);
-							upButton._mouseUp = function(){
-								ige.network.send('moveUp', {data:"hihi"})
-							}
+						upButton._mouseUp = function(){
+							ige.network.send('moveUp', {data:"hihi"})
+						}
+						
+						var leftButton = new IgeUiButton()
+							.id('left-button')
+							.top(300)
+							.left(50)
+							.value('Left')
+							.mount(leftNav);
+						leftButton._mouseUp = function(){
+							ige.network.send('moveLeft', {data:"hihi"})
+						}
+
+						var rightButton = new IgeUiButton()
+							.id('right-button')
+							.top(300)
+							.right(50)
+							.value('Right')
+							.mount(leftNav);
+						rightButton._mouseUp = function(){
+							ige.network.send('moveRight', {data:"hihi"})
+						}
 
 						var downButton = new IgeUiButton()
-							.id('button2')
-							.value('moveDown')
+							.id('down-button')
+							.top(340)
+							.value('Down')
 							.mount(leftNav);
-							downButton._mouseUp = function(){
+						downButton._mouseUp = function(){
 								ige.network.send('moveDown', {data:"hihi"})
 							}
 
@@ -254,7 +282,7 @@ var Client = IgeClass.extend({
 						}
 
 						ige.network.define('moveUp', playerMessage);
-						ige.network.define('moveDown', playerMessage);
+						ige.network.define('moveRight', playerMessage);
 						ige.network.define('moveLeft', playerMessage);
 						ige.network.define('moveDown', playerMessage);
 
