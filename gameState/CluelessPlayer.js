@@ -1,4 +1,4 @@
-export class CluelessPlayer{
+class CluelessPlayer{
     constructor(playerId, character, positionX, positionY){
         this.playerId = playerId;
         this.character = character;
@@ -7,3 +7,5 @@ export class CluelessPlayer{
         this.hand = [];
     }
 }
+
+module.exports = CluelessPlayer;
