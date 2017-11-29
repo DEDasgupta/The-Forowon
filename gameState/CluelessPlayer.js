@@ -1,10 +1,10 @@
 class CluelessPlayer{
-    constructor(playerId, character, positionX, positionY){
+    constructor(playerId, character, position){
         this.playerId = playerId;
         this.character = character;
-        this.positionX = positionX;
-        this.positionY = positionY;
-        this.hand = [];
+        this.position = position;
+        this.hand = new Array();
+        this.isInRoom = false;
     }
 }
 
