@@ -28,37 +28,169 @@ var ServerNetworkEvents = {
 		}
 	},
 	_moveUp: function(data, clientId){
-		ige.server.players[clientId]._translate.tween().stepBy({x:0,y:-100},1000).start();
+
+		var player = ige.server.GameBoard.allPlayers.filter(user => user.playerId == clientId)[0];
+
+    	console.log("_moveUp ", player.character);
+    	console.log("_moveUp ", player.position[0]);
+    	console.log("_moveUp ", player.position[1]);
+		var destX = player.position[0]-1;
+		var destY = player.position[1];
+    	console.log("_moveUp ", destX);
+    	console.log("_moveUp ", destY);
+    	//Player is in a room
+    	if(player.isInRoom)
+    	{
+    		console.log("_moveUp ", "In Room");
+    		if (ige.server.GameBoard.canPlayerMoveFromRoom(player.playerId, destX, destY))
+    		{
+    			console.log("_moveUp ", "success");
+    			ige.server.GameBoard.movePlayerFromRoom(player.playerId, destX, destY);
+    			ige.server.players[clientId]._translate.tween().stepBy({x:0,y:-120},1000).start();
+    		}
+    	}
+    	else // or in hall
+    	{
+    		console.log("_moveUp ", "In Hall");
+    		if (ige.server.GameBoard.canPlayerMoveFromHall(player.playerId, destX, destY))
+    		{
+    			console.log("_moveUp ", "success");
+    			ige.server.GameBoard.movePlayerFromHall(player.playerId, destX, destY);
+				ige.server.players[clientId]._translate.tween().stepBy({x:0,y:-120},1000).start();
+    		}
+    	}
 		ige.log("log")
 		console.log(clientId)
 		console.log(data)
 	},
 	_moveDown: function(data, clientId){
-		ige.server.players[clientId]._translate.tween().stepBy({x:0,y:100},1000).start();
+
+		var player = ige.server.GameBoard.allPlayers.filter(user => user.playerId == clientId)[0];
+
+    	console.log("_moveDown ", player.character);
+    	console.log("_moveDown ", player.position[0]);
+    	console.log("_moveDown ", player.position[1]);
+		var destX = player.position[0]+1;
+		var destY = player.position[1];
+    	console.log("_moveDown ", destX);
+    	console.log("_moveDown ", destY);
+
+    	//Player is in a room
+    	if(player.isInRoom)
+    	{
+    		console.log("_moveDown ", "In Room");
+    		if (ige.server.GameBoard.canPlayerMoveFromRoom(player.playerId, destX, destY))
+    		{
+    			console.log("_moveDown ", "success");
+    			ige.server.GameBoard.movePlayerFromRoom(player.playerId, destX, destY);
+				ige.server.players[clientId]._translate.tween().stepBy({x:0,y:120},1000).start();
+    		}
+    	}
+    	else // or in hall
+    	{
+    		console.log("_moveDown ", "In Hall");
+    		if (ige.server.GameBoard.canPlayerMoveFromHall(player.playerId, destX, destY))
+    		{
+    			console.log("_moveDown ", "success");
+    			ige.server.GameBoard.movePlayerFromHall(player.playerId, destX, destY);
+				ige.server.players[clientId]._translate.tween().stepBy({x:0,y:120},1000).start();
+    		}
+    	}
+
 		ige.log("log")
 		console.log(clientId)
 		console.log(data)
 	},
 	_moveLeft: function(data, clientId){
-		ige.server.players[clientId]._translate.tween().stepBy({x:-130,y:0},1000).start();
+
+		var player = ige.server.GameBoard.allPlayers.filter(user => user.playerId == clientId)[0];
+
+    	console.log("_moveLeft ", player.character);
+    	console.log("_moveLeft ", player.position[0]);
+    	console.log("_moveLeft ", player.position[1]);
+		var destX = player.position[0];
+		var destY = player.position[1]-1;
+    	console.log("_moveLeft ", destX);
+    	console.log("_moveLeft ", destY);
+
+    	//Player is in a room
+    	if(player.isInRoom)
+    	{
+    		console.log("_moveLeft ", "In Room");
+    		if (ige.server.GameBoard.canPlayerMoveFromRoom(player.playerId, destX, destY))
+    		{
+    			console.log("_moveLeft ", "success");
+    			ige.server.GameBoard.movePlayerFromRoom(player.playerId, destX, destY);
+				ige.server.players[clientId]._translate.tween().stepBy({x:-120,y:0},1000).start();
+    		}
+    	}
+    	else // or in hall
+    	{
+    		console.log("_moveLeft ", "In Hall");
+    		if (ige.server.GameBoard.canPlayerMoveFromHall(player.playerId, destX, destY))
+    		{
+    			console.log("_moveLeft ", "success");
+    			ige.server.GameBoard.movePlayerFromHall(player.playerId, destX, destY);
+				ige.server.players[clientId]._translate.tween().stepBy({x:-120,y:0},1000).start();
+    		}
+    	}
+
 		ige.log("log")
 		console.log(clientId)
 		console.log(data)
 	},
 	_moveRight: function(data, clientId){
-		ige.server.players[clientId]._translate.tween().stepBy({x:130,y:0},1000).start();
+
+		var player = ige.server.GameBoard.allPlayers.filter(user => user.playerId == clientId)[0];
+
+    	console.log("_moveRight ", player.character);
+    	console.log("_moveRight ", player.position[0]);
+    	console.log("_moveRight ", player.position[1]);
+		var destX = player.position[0];
+		var destY = player.position[1]+1;
+    	console.log("_moveRight ", destX);
+    	console.log("_moveRight ", destY);
+
+    	//Player is in a room
+    	if(player.isInRoom)
+    	{
+    		console.log("_moveRight ", "In Hall");
+    		if (ige.server.GameBoard.canPlayerMoveFromRoom(player.playerId, destX, destY))
+    		{
+    			console.log("_moveRight ", "success");
+    			ige.server.GameBoard.movePlayerFromRoom(player.playerId, destX, destY);
+				ige.server.players[clientId]._translate.tween().stepBy({x:120,y:0},1000).start();
+    		}
+    	}
+    	else // or in hall
+    	{
+    		console.log("_moveRight ", "In Hall");
+    		if (ige.server.GameBoard.canPlayerMoveFromHall(player.playerId, destX, destY))
+    		{
+    			console.log("_moveRight ", "success");
+    			ige.server.GameBoard.movePlayerFromHall(player.playerId, destX, destY);
+				ige.server.players[clientId]._translate.tween().stepBy({x:120,y:0},1000).start();
+    		}
+    	}
+
 		ige.log("log")
 		console.log(clientId)
 		console.log(data)
 	},
 
 	_onPlayerEntity: function (data, clientId, requestId) {
+		var identity = "";
 		var index = 0;
 		console.log("_onPlayerEntity ", data);
+
+		// convert to full name
 		for (index = 0; index < 6; index++)
 		{
-			if (data == ige.server.characterNames[index] || data == ige.server.characterShortNames[index])
+			if (data == ige.server.characterShortNames[index] || data == ige.server.characterNames[index])
 			{
+				identity = ige.server.characterNames[index];
+
+				// playersMap is the mapping the clientID to the character name
 				ige.server.playersMap[clientId] = index;
 				if (!ige.server.players[clientId]) 
 				{
@@ -68,6 +200,20 @@ var ServerNetworkEvents = {
 				// Tell the client to track their player entity
 				ige.network.response(requestId, ige.server.players[clientId].id());
 				}
+				break;
+			}
+		}
+
+		// repeat the search again which is different since the allPlayers is shuffle while
+		// the player list is not
+		for (index = 0; index < 6; index++)
+		{
+			if (identity == ige.server.GameBoard.allPlayers[index].character)
+			{
+
+				// save the ID to gameboard and active player
+				ige.server.GameBoard.allPlayers[index].playerId = clientId;
+				ige.server.GameBoard.activePlayers.push(ige.server.GameBoard.allPlayers[index])
 				break;
 			}
 		}

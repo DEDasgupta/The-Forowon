@@ -1,4 +1,6 @@
 
+var GameBoard = require('./gameState/gameboard');
+
 var Server = IgeClass.extend({
 	classId: 'Server',
 	Server: true,
@@ -11,7 +13,7 @@ var Server = IgeClass.extend({
 		this.players = {};
 		this.playersMap = {};
 		this.playerList= {};
-		this.characterSet = new Array(5).fill(false);
+		this.characterSet = new Array(6).fill(false);
 		this.numOfPlayers = 0;
 		this.characterShortNames = ["Scarlet", "Mustard", "White", "Green", "Peacock", "Plum"];
 		this.characterNames = ["Miss Scarlet", "Col. Mustard", "Mrs. White", "Mr. Green", "Mrs. Peacock", "Prof Plum"];
@@ -85,6 +87,8 @@ var Server = IgeClass.extend({
 							.id('game-grid')
 							.streamMode(1)
 							.mount(baseScene);
+
+						self.GameBoard = new GameBoard();
 							
 						// Scarlet
 						self.playerList[0] = new Player()

@@ -41,12 +41,13 @@ class GameBoard {
             {position: [4, 3], adjacentRooms: ["Ballroom","Kitchen"]}
         ];
 
+        // the character name must match with the server name list
         this.characters = [
-            {name: "Colonel Mustard", position: [1, 4]},
-            {name: "Miss Scarlett", position: [0, 3]},
+            {name: "Miss Scarlet", position: [0, 3]},
+            {name: "Col. Mustard", position: [1, 4]},
+            {name: "Mrs. White", position: [4, 3]},
             {name: "Mr. Green", position: [4, 1]},
             {name: "Mrs. Peacock", position: [3, 0]},
-            {name: "Mrs. White", position: [4, 3]},
             {name: "Professor Plum", position: [1, 0]},
         ];
 
@@ -70,9 +71,10 @@ class GameBoard {
 
             this.allPlayers.push(player);
 
-            if(index < numberOfPlayers){
-                this.activePlayers.push(player);
-            }
+            // This will be done in Server event when new player connect
+            //if(index < numberOfPlayers){
+            //    this.activePlayers.push(player);
+            //}
         }, this);
     }
 
@@ -100,7 +102,7 @@ class GameBoard {
 
     dealRemainingCards(remainingCards, numberOfPlayers){
         remainingCards.forEach(function(card, index){
-            this.activePlayers[index % numberOfPlayers].hand.push(card);
+            this.allPlayers[index % numberOfPlayers].hand.push(card);
         }, this);
     }
 
@@ -131,70 +133,104 @@ GameBoard.prototype.canPlayerMoveFromRoom = function(playerId, destX, destY){
     if(destX < 0 || destX > 4 || destY < 0 || destY > 4) return false;
 
     //Space already occupied
-    if(GameBoard.grid[destX][destY] == 1) return false;
+    if(this.grid[destX][destY] == 1) return false;
 
-    var player = GameBoard.allPlayers.filter(user => user.playerId = playerId)[0];
+    var player = this.allPlayers.filter(user => user.playerId == playerId)[0];
 
     //Player isn't even in a room
     if(player.isInRoom == false) return false;
 
-    var roomArray = GameBoard.rooms.filter(room => room.position = player.position);
 
+    var roomArray = null;
+
+    for (var i = 0; i < this.rooms.length; i++) {
+        if (this.rooms[i].position[0] == player.position[0] && this.rooms[i].position[1] == player.position[1])
+        {
+            roomArray = this.rooms[i];
+            break;
+        }
+    }
     //Didn't find room in matching position.
-    if(roomArray.length != 1) return false;
+    if(roomArray == null) return false;
 
     //Room player is standing in has an open hall or secret passage to a room
-    if(roomArray[0].exits.contains([destX, destY])) return true;
-    else return false;
+    for (var i = 0; i < roomArray.exits.length; i++) {
+        if (roomArray.exits[i][0] == destX && roomArray.exits[i][1] == destY)
+        {
+            return true;
+        }
+    }
+    return false;
 
 }
 
 GameBoard.prototype.movePlayerFromRoom = function(playerId, destX, destY){
-    var player = GameBoard.allPlayers.filter(user => user.playerId = playerId)[0];
+    var player = this.allPlayers.filter(user => user.playerId == playerId)[0];
 
     //update grid to show occupancy
-    GameBoard.grid[player.position[0]][player.position[1]] = 0;
-    GameBoard.grid[destX][destY] = 1;
+    this.grid[player.position[0]][player.position[1]] = 0;
+    this.grid[destX][destY] = 1;
 
     //update player position
     player.position = [destX, destY];
 
     //update player isInRoom
-    if(GameBoard.rooms.filter(room => room.position == [destX, destY]).length > 0){
-        player.isInRoom = true;
-    } else{
-        player.isInRoom = false;
+    player.isInRoom = false;
+    for (var i = 0; i < this.rooms.length; i++){
+        if (this.rooms[i].position[0] == destX && this.rooms[i].position[1] == destY)
+        {
+            player.isInRoom = true;
+            break;
+        }
     }
 }
 
 GameBoard.prototype.canPlayerMoveFromHall= function(playerId, destX, destY){
+    debugger;
     //Outside of available spaces or space already occupied in grid
-    if(destX < 0 || destX > 4 || destY < 0 || destY > 4 || GameBoard.grid[destX][destY] == 1) return false;
+    if(destX < 0 || destX > 4 || destY < 0 || destY > 4) return false;
 
-    var player = GameBoard.allPlayers.filter(user => user.playerId = playerId)[0];
+    if(this.grid[destX][destY] == 1) return false;
+
+    var player = this.allPlayers.filter(user => user.playerId == playerId)[0];
 
     //Player isn't even in a hall
     if(player.isInRoom == true) return false;
 
-    var hallArray = GameBoard.halls.filter(hall => hall.position = player.position);
+    var hallArray = null;
 
+    for (var i = 0; i < this.halls.length; i++) {
+        if (this.halls[i].position[0] == player.position[0] && this.halls[i].position[1] == player.position[1])
+        {
+            hallArray = this.halls[i];
+            break;
+        }
+    }
     //Didn't find room in matching position.
-    if(hallArray.length != 1) return false;
+    if(hallArray == null) return false;
 
     //Hall player is standing in has an open room adjacent
-    var adjacentRoomName = GameBoard.rooms.filter(room => room.position == [destX, destY])[0].name;
+    var adjacentRoomName = "none";
 
-    if(hallArray[0].adjacentRooms.contains(adjacentRoomName)) return true;
+    for (var i = 0; i < this.rooms.length; i++){
+        if (this.rooms[i].position[0] == destX && this.rooms[i].position[1] == destY)
+        {
+            adjacentRoomName = this.rooms[i].name;
+            break;
+        }
+    }
+
+    if(hallArray.adjacentRooms.indexOf(adjacentRoomName) != -1) return true;
     else return false;
 
 }
 
 GameBoard.prototype.movePlayerFromHall = function(playerId, destX, destY){
-    var player = GameBoard.allPlayers.filter(user => user.playerId = playerId)[0];
+    var player = this.allPlayers.filter(user => user.playerId == playerId)[0];
 
     //update grid to show occupancy
-    GameBoard.grid[player.position[0]][player.position[1]] = 0;
-    GameBoard.grid[destX][destY] = 1;
+    this.grid[player.position[0]][player.position[1]] = 0;
+    this.grid[destX][destY] = 1;
 
     //update player position
     player.position = [destX, destY];
