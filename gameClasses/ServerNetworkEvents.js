@@ -49,6 +49,7 @@ var ServerNetworkEvents = {
     			console.log("_moveUp ", "success");
     			ige.server.GameBoard.movePlayerFromRoom(player.playerId, destX, destY);
     			ige.server.players[clientId]._translate.tween().stepBy({x:0,y:-120},1000).start();
+				ige.network.send('Notification', {data: player.character + " move from Room to Up"});
     		}
     	}
     	else // or in hall
@@ -59,6 +60,7 @@ var ServerNetworkEvents = {
     			console.log("_moveUp ", "success");
     			ige.server.GameBoard.movePlayerFromHall(player.playerId, destX, destY);
 				ige.server.players[clientId]._translate.tween().stepBy({x:0,y:-120},1000).start();
+				ige.network.send('Notification', {data: player.character + " move from Hall to Up"});
     		}
     	}
 		ige.log("log")
@@ -89,6 +91,7 @@ var ServerNetworkEvents = {
     			console.log("_moveDown ", "success");
     			ige.server.GameBoard.movePlayerFromRoom(player.playerId, destX, destY);
 				ige.server.players[clientId]._translate.tween().stepBy({x:0,y:120},1000).start();
+				ige.network.send('Notification', {data: player.character + " move from Room to Down"});
     		}
     	}
     	else // or in hall
@@ -99,6 +102,7 @@ var ServerNetworkEvents = {
     			console.log("_moveDown ", "success");
     			ige.server.GameBoard.movePlayerFromHall(player.playerId, destX, destY);
 				ige.server.players[clientId]._translate.tween().stepBy({x:0,y:120},1000).start();
+				ige.network.send('Notification', {data: player.character + " move from Hall to Down"});
     		}
     	}
 
@@ -130,6 +134,7 @@ var ServerNetworkEvents = {
     			console.log("_moveLeft ", "success");
     			ige.server.GameBoard.movePlayerFromRoom(player.playerId, destX, destY);
 				ige.server.players[clientId]._translate.tween().stepBy({x:-120,y:0},1000).start();
+				ige.network.send('Notification', {data: player.character + " move from Room to Left"});
     		}
     	}
     	else // or in hall
@@ -140,6 +145,7 @@ var ServerNetworkEvents = {
     			console.log("_moveLeft ", "success");
     			ige.server.GameBoard.movePlayerFromHall(player.playerId, destX, destY);
 				ige.server.players[clientId]._translate.tween().stepBy({x:-120,y:0},1000).start();
+				ige.network.send('Notification', {data: player.character + " move from Hall to Left"});
     		}
     	}
 
@@ -171,6 +177,7 @@ var ServerNetworkEvents = {
     			console.log("_moveRight ", "success");
     			ige.server.GameBoard.movePlayerFromRoom(player.playerId, destX, destY);
 				ige.server.players[clientId]._translate.tween().stepBy({x:120,y:0},1000).start();
+				ige.network.send('Notification', {data: player.character + " move from Room to Right"});
     		}
     	}
     	else // or in hall
@@ -181,7 +188,7 @@ var ServerNetworkEvents = {
     			console.log("_moveRight ", "success");
     			ige.server.GameBoard.movePlayerFromHall(player.playerId, destX, destY);
 				ige.server.players[clientId]._translate.tween().stepBy({x:120,y:0},1000).start();
-				ige.network.send('Notification', {data: player.character + " move to Right"});
+				ige.network.send('Notification', {data: player.character + " move from Hall to Right"});
     		}
     	}
 
