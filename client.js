@@ -138,6 +138,19 @@ var Client = IgeClass.extend({
 							'borderColor': '#00ff00'
 						});
 
+						// Notification
+						ige.ui.style('#textBox2', {
+							'top': 5,
+							'left': 400,
+							'right': 200,
+							'font': '24px Open Sans',
+							'color': '#DC143C',
+							'backgroundColor': '#212121'
+						});
+						ige.ui.style('#textBox3:focus', {
+							'borderColor': '#00ff00'
+						});
+
 						var topNav = new IgeUiElement()
 							.id('topNav')
 							.mount(self.uiScene);
@@ -201,10 +214,15 @@ var Client = IgeClass.extend({
 								ige.network.send('moveDown', {data:"hihi"})
 							}
 
-						var commandText = new IgeUiTextBox()
+						this.commandText = new IgeUiTextBox()
 							.id('textBox1')
 							.value('')
 							.mount(leftNav);
+
+						self.notificationText = new IgeUiTextBox()
+							.id('textBox2')
+							.value('')
+							.mount(topNav);
 
 						/* This Button send the command to the server */
 						var sendButton = new IgeUiButton()
@@ -212,7 +230,7 @@ var Client = IgeClass.extend({
 							.value('Send')
 							.mount(leftNav);
 							sendButton._mouseUp = function(){
-								ige.network.send(commandText.value, {data:"hihi"})
+								ige.network.send(this.commandText._value, {data:"hihi"})
 							}
 						
 
@@ -285,6 +303,7 @@ var Client = IgeClass.extend({
 						ige.network.define('moveRight', playerMessage);
 						ige.network.define('moveLeft', playerMessage);
 						ige.network.define('moveDown', playerMessage);
+						ige.network.define('Notification', self._onNotification);
 
 						//ige.network.send('player_message', {data:"hihi"})
 					});

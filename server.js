@@ -15,8 +15,8 @@ var Server = IgeClass.extend({
 		this.playerList= {};
 		this.characterSet = new Array(6).fill(false);
 		this.numOfPlayers = 0;
-		this.characterShortNames = ["Scarlet", "Mustard", "White", "Green", "Peacock", "Plum"];
-		this.characterNames = ["Miss Scarlet", "Col. Mustard", "Mrs. White", "Mr. Green", "Mrs. Peacock", "Prof Plum"];
+		this.characterShortNames = ["Scarlet", "Plum", "Peacock", "Green", "White", "Mustard"];
+		this.characterNames = ["Miss Scarlet", "Prof Plum", "Mrs. Peacock", "Mr. Green", "Mrs. White", "Col. Mustard"];
 
 		// Add the server-side game methods / event handlers
 		this.implement(ServerNetworkEvents);
@@ -65,6 +65,7 @@ var Server = IgeClass.extend({
 
 						ige.network.on('connect', self._onPlayerConnect); // Defined in ./gameClasses/ServerNetworkEvents.js
 						ige.network.on('disconnect', self._onPlayerDisconnect); // Defined in ./gameClasses/ServerNetworkEvents.js
+						ige.network.define('Notification', self._onNotification);
 
 						// Add the network stream component
 						ige.network.addComponent(IgeStreamComponent)

@@ -58,6 +58,10 @@ var ClientNetworkEvents = {
 			// Ask the server to create an entity for us
 			ige.network.request('playerEntity', ige.client.clientCharacter, self.ClientNetworkEvents._onPlayerEntity);
 		}
+	},
+
+	_onNotification: function (cmd, data) {
+		ige.client.notificationText.value(cmd.data);
 	}
 	
 };

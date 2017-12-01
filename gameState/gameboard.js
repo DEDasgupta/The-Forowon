@@ -44,11 +44,11 @@ class GameBoard {
         // the character name must match with the server name list
         this.characters = [
             {name: "Miss Scarlet", position: [0, 3]},
-            {name: "Col. Mustard", position: [1, 4]},
-            {name: "Mrs. White", position: [4, 3]},
-            {name: "Mr. Green", position: [4, 1]},
-            {name: "Mrs. Peacock", position: [3, 0]},
             {name: "Professor Plum", position: [1, 0]},
+            {name: "Mrs. Peacock", position: [3, 0]},
+            {name: "Mr. Green", position: [4, 1]},
+            {name: "Mrs. White", position: [4, 3]},
+            {name: "Col. Mustard", position: [1, 4]}
         ];
 
         this.weapons = ["Candlestick", "Knife", "Lead Pipe", "Revolver", "Rope", "Wrench"];
@@ -58,6 +58,8 @@ class GameBoard {
 
         this.caseFile = null;
         this.numberOfPlayers = 6;
+
+        this.playerTurn = "";
 
         this.loadPlayers(this.numberOfPlayers);
         this.placeWeapons();

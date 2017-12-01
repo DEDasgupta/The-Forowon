@@ -31,6 +31,8 @@ var ServerNetworkEvents = {
 
 		var player = ige.server.GameBoard.allPlayers.filter(user => user.playerId == clientId)[0];
 
+		//if (player.character == ige.server.GameBoard.playerTurn)
+		//{
     	console.log("_moveUp ", player.character);
     	console.log("_moveUp ", player.position[0]);
     	console.log("_moveUp ", player.position[1]);
@@ -62,11 +64,14 @@ var ServerNetworkEvents = {
 		ige.log("log")
 		console.log(clientId)
 		console.log(data)
+		//}
 	},
 	_moveDown: function(data, clientId){
 
 		var player = ige.server.GameBoard.allPlayers.filter(user => user.playerId == clientId)[0];
 
+		//if (player.character == ige.server.GameBoard.playerTurn)
+		//{
     	console.log("_moveDown ", player.character);
     	console.log("_moveDown ", player.position[0]);
     	console.log("_moveDown ", player.position[1]);
@@ -100,11 +105,14 @@ var ServerNetworkEvents = {
 		ige.log("log")
 		console.log(clientId)
 		console.log(data)
+		//}
 	},
 	_moveLeft: function(data, clientId){
 
 		var player = ige.server.GameBoard.allPlayers.filter(user => user.playerId == clientId)[0];
 
+		//if (player.character == ige.server.GameBoard.playerTurn)
+		//{
     	console.log("_moveLeft ", player.character);
     	console.log("_moveLeft ", player.position[0]);
     	console.log("_moveLeft ", player.position[1]);
@@ -138,11 +146,14 @@ var ServerNetworkEvents = {
 		ige.log("log")
 		console.log(clientId)
 		console.log(data)
+		//}
 	},
 	_moveRight: function(data, clientId){
 
 		var player = ige.server.GameBoard.allPlayers.filter(user => user.playerId == clientId)[0];
 
+		//if (player.character == ige.server.GameBoard.playerTurn)
+		//{
     	console.log("_moveRight ", player.character);
     	console.log("_moveRight ", player.position[0]);
     	console.log("_moveRight ", player.position[1]);
@@ -170,12 +181,14 @@ var ServerNetworkEvents = {
     			console.log("_moveRight ", "success");
     			ige.server.GameBoard.movePlayerFromHall(player.playerId, destX, destY);
 				ige.server.players[clientId]._translate.tween().stepBy({x:120,y:0},1000).start();
+				ige.network.send('Notification', {data: player.character + " move to Right"});
     		}
     	}
 
 		ige.log("log")
 		console.log(clientId)
 		console.log(data)
+		//}
 	},
 
 	_onPlayerEntity: function (data, clientId, requestId) {
@@ -189,6 +202,7 @@ var ServerNetworkEvents = {
 			if (data == ige.server.characterShortNames[index] || data == ige.server.characterNames[index])
 			{
 				identity = ige.server.characterNames[index];
+				ige.server.numOfPlayers++;
 
 				// playersMap is the mapping the clientID to the character name
 				ige.server.playersMap[clientId] = index;
@@ -215,6 +229,20 @@ var ServerNetworkEvents = {
 				ige.server.GameBoard.allPlayers[index].playerId = clientId;
 				ige.server.GameBoard.activePlayers.push(ige.server.GameBoard.allPlayers[index])
 				break;
+			}
+		}
+
+		// If we get at least 4 players, start the game
+		if (ige.server.numOfPlayers >= 4)
+		{
+			// start the game
+			for (index = 0; index < 6; index++)
+			{
+				if (ige.server.characterSet[index])
+				{
+					ige.server.GameBoard.playerTurn = ige.server.characterNames[index];
+					ige.network.send('Notification', {data: ige.server.characterNames[index]+ " player Turn"});
+				}
 			}
 		}
 	},
@@ -332,6 +360,9 @@ var ServerNetworkEvents = {
 			ige.network.response(requestId, result);
 		}
 		console.log("_onPlayerRegister", "Register " + data);
+	},
+
+	_onNotification: function (cmd, data) {
 	}
 };
 
