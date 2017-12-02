@@ -3,7 +3,7 @@
 var image = {
 	render: function (ctx, entity) {
 		// Draw the player entity
-		switch (entity._id)
+		switch (entity._id)//["Scarlet", "Plum", "Peacock", "Green", "White", "Mustard"];
 		{
 			case "Scarlet":
 				if (entity.initialize)

@@ -138,11 +138,20 @@ var Client = IgeClass.extend({
 						var topNav = new IgeUiElement()
 							.id('topNav')
 							.mount(self.uiScene);
-							
+						
+						self.characterName = self.turnText = new IgeUiLabel()
+							.id('charText')
+							.top(0)
+							.left(15)
+							.width(150)
+							.color('#DC143C')
+							.value('Character')
+							.mount(topNav);
+						
 						self.turnText = new IgeUiLabel()
 							.id('turnText')
 							.top(0)
-							.left(15)
+							.left(200)
 							.width(300)
 							.value('Waiting for Players')
 							.mount(topNav);
@@ -150,7 +159,7 @@ var Client = IgeClass.extend({
 						self.notificationText = new IgeUiLabel()
 							.id('notificationText')
 							.top(0)
-							.left(400)
+							.left(600)
 							.width(400)
 							.value('')
 							.mount(topNav);

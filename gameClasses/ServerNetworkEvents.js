@@ -381,7 +381,7 @@ var ServerNetworkEvents = {
 
 	_onPlayerRegister: function (data, clientId, requestId) {
 		var success = false;
-		switch (data)
+		switch (data)//["Scarlet", "Plum", "Peacock", "Green", "White", "Mustard"];
 		{
 			case "Scarlet":
 			case "Miss Scarlet":
@@ -391,16 +391,16 @@ var ServerNetworkEvents = {
 					ige.server.characterSet[0] = true;
 				}
 				break;
-			case "Mustard":
-			case "Col. Mustard":
+			case "Plum":
+			case "Professor Plum":
 				if (ige.server.characterSet[1] == false)
 				{
 					success = true;
 					ige.server.characterSet[1] = true;
 				}
 				break;
-			case "White":
-			case "Mrs. White":
+			case "Peacock":
+			case "Mrs. Peacock":
 				if (ige.server.characterSet[2] == false)
 				{
 					success = true;
@@ -415,16 +415,16 @@ var ServerNetworkEvents = {
 					ige.server.characterSet[3] = true;
 				}
 				break;
-			case "Peacock":
-			case "Mrs. Peacock":
+			case "White":
+			case "Mrs. White":
 				if (ige.server.characterSet[4] == false)
 				{
 					success = true;
 					ige.server.characterSet[4] = true;
 				}
 				break;
-			case "Plum":
-			case "Professor Plum":
+			case "Mustard":
+			case "Col. Mustard":
 				if (ige.server.characterSet[5] == false)
 				{
 					success = true;

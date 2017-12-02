@@ -17,7 +17,7 @@ var Server = IgeClass.extend({
 		this.characterSet = new Array(6).fill(false);
 		this.numOfPlayers = 0;
 		this.characterShortNames = ["Scarlet", "Plum", "Peacock", "Green", "White", "Mustard"];
-		this.characterNames = ["Miss Scarlet", "Prof Plum", "Mrs. Peacock", "Mr. Green", "Mrs. White", "Col. Mustard"];
+		this.characterNames = ["Miss Scarlet", "Professor Plum", "Mrs. Peacock", "Mr. Green", "Mrs. White", "Col. Mustard"];
 
 		// Add the server-side game methods / event handlers
 		this.implement(ServerNetworkEvents);
@@ -91,17 +91,17 @@ var Server = IgeClass.extend({
 								
 						// Mustard					
 						self.playerList[1] = new Player()
-							.id('Mustard')
+							.id('Plum')
 							.streamMode(1)
 							.mount(baseScene);
-						self.playersNameMap['Mustard'] = self.playerList[1];	
+						self.playersNameMap['Plum'] = self.playerList[1];	
 
 						// White
 						self.playerList[2] = new Player()
-							.id('White')
+							.id('Peacock')
 							.streamMode(1)
 							.mount(baseScene);		
-						self.playersNameMap['White'] = self.playerList[2];		
+						self.playersNameMap['Peacock'] = self.playerList[2];		
 
 						// Green
 						self.playerList[3] = new Player()
@@ -112,17 +112,17 @@ var Server = IgeClass.extend({
 
 						// Peacock
 						self.playerList[4] = new Player()
-							.id('Peacock')
+							.id('White')
 							.streamMode(1)
 							.mount(baseScene);				
-						self.playersNameMap['Peacock'] = self.playerList[4];
+						self.playersNameMap['White'] = self.playerList[4];
 
 						// Plum
 						self.playerList[5] = new Player()
-							.id('Plum')
+							.id('Mustard')
 							.streamMode(1)
 							.mount(baseScene);
-						self.playersNameMap['Plum'] = self.playerList[5];
+						self.playersNameMap['Mustard'] = self.playerList[5];
 
 						// Create the scene
 						self.mainScene = new IgeScene2d()

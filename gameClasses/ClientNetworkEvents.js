@@ -18,6 +18,7 @@ var ClientNetworkEvents = {
 			ige.client.card2.value(data.hand[1])
 			ige.client.card3.value(data.hand[2])
 		}
+		ige.client.characterName.value(data.id);
 		var self = this;
 		self._eventListener = ige.network.stream.on('entityCreated', function (entity) {
 			if (entity.id() === data.id) {
