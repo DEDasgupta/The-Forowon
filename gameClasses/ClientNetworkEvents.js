@@ -7,38 +7,31 @@ var ClientNetworkEvents = {
 	 * @param data The data object that contains any data sent from the server.
 	 * @private
 	 */
-	_onPlayerEntity: function (data) {
-		if (ige.$(data)) {
-			ige.client.vp1.camera.trackTranslate(ige.$(data), 50);
-
-			// Set the time stream UI entity to monitor our player entity
-			// time stream data
-			ige.client.tsVis.monitor(ige.$(data));
-		} else {
-			// The client has not yet received the entity via the network
-			// stream so lets ask the stream to tell us when it creates a
-			// new entity and then check if that entity is the one we
-			// should be tracking!
-			var self = this;
-			self._eventListener = ige.network.stream.on('entityCreated', function (entity) {
-				if (entity.id() === data) {
-					// Tell the camera to track out player entity
-					//ige.client.vp1.camera.trackTranslate(ige.$(data), 50);
-
-					// Set the time stream UI entity to monitor our player entity
-					// time stream data
-					//ige.client.tsVis.monitor(ige.$(data));
-
-					// Turn off the listener for this event now that we
-					// have found and started tracking our player entity
-					ige.network.stream.off('entityCreated', self._eventListener, function (result) {
-						if (!result) {
-							this.log('Could not disable event listener!', 'warning');
-						}
-					});
-				}
-			});
+	_onPlayerEntity: function (cmd, data) {
+		// The client has not yet received the entity via the network
+		// stream so lets ask the stream to tell us when it creates a
+		// new entity and then check if that entity is the one we
+		// should be tracking!
+		console.log(data);
+		if (data.hand) {
+			ige.client.card1.value(data.hand[0])
+			ige.client.card2.value(data.hand[1])
+			ige.client.card3.value(data.hand[2])
 		}
+		var self = this;
+		self._eventListener = ige.network.stream.on('entityCreated', function (entity) {
+			if (entity.id() === data.id) {
+				
+
+				// Turn off the listener for this event now that we
+				// have found and started tracking our player entity
+				ige.network.stream.off('entityCreated', self._eventListener, function (result) {
+					if (!result) {
+						this.log('Could not disable event listener!', 'warning');
+					}
+				});
+			}
+		});
 	},
 
 	_onRegisterCharacter: function (cmd, data) {

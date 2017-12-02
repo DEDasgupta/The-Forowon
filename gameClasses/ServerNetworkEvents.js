@@ -314,24 +314,22 @@ var ServerNetworkEvents = {
 		var identity = "";
 		var index = 0;
 		console.log("_onPlayerEntity ", data);
-
+		var response = {}
 		// convert to full name
-		for (index = 0; index < 6; index++)
-		{
-			if (data == ige.server.characterShortNames[index] || data == ige.server.characterNames[index])
-			{
+		for (index = 0; index < 6; index++) {
+			if (data === ige.server.characterShortNames[index] || data === ige.server.characterNames[index]) {
+				
 				identity = ige.server.characterNames[index];
 				ige.server.numOfPlayers++;
 
 				// playersMap is the mapping the clientID to the character name
 				ige.server.playersMap[clientId] = index;
-				if (!ige.server.players[clientId]) 
-				{
-				console.log("_onPlayerEntity ", clientId);
-				ige.server.players[clientId] = ige.server.playerList[index];
-
-				// Tell the client to track their player entity
-				ige.network.response(requestId, ige.server.players[clientId].id());
+				if (!ige.server.players[clientId]) {
+					console.log("_onPlayerEntity ", clientId);
+					ige.server.players[clientId] = ige.server.playerList[index];
+					response.id = ige.server.players[clientId].id();
+					// Tell the client to track their player entity
+					
 				}
 				break;
 			}
@@ -346,10 +344,12 @@ var ServerNetworkEvents = {
 
 				// save the ID to gameboard and active player
 				ige.server.GameBoard.allPlayers[index].playerId = clientId;
-				ige.server.GameBoard.activePlayers.push(ige.server.GameBoard.allPlayers[index])
+				ige.server.GameBoard.activePlayers.push(ige.server.GameBoard.allPlayers[index]);
+				response.hand = ige.server.GameBoard.allPlayers[index].hand;
 				break;
 			}
 		}
+		ige.network.response(requestId, response);
 
 		// If we get at least 4 players, start the game
 		if (ige.server.numOfPlayers >= 4)

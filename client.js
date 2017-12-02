@@ -25,6 +25,7 @@ var Client = IgeClass.extend({
 				alert(data.message)
 			}
 		}
+		
 
 		// Load the textures we want to use
 		this.textures = {
@@ -108,6 +109,9 @@ var Client = IgeClass.extend({
 							'font': '12px Open Sans',
 							'color': '#000000'
 						});
+						ige.ui.style('IgeUiLabel', {
+							'font': '18px Open Sans',
+						});
 						ige.ui.style('#textBox1', {
 							'top': 140
 						});
@@ -134,6 +138,14 @@ var Client = IgeClass.extend({
 						var topNav = new IgeUiElement()
 							.id('topNav')
 							.mount(self.uiScene);
+							
+						self.turnText = new IgeUiLabel()
+							.id('turnText')
+							.top(0)
+							.left(15)
+							.width(300)
+							.value('Waiting for Players')
+							.mount(topNav);
 
 						self.notificationText = new IgeUiLabel()
 							.id('notificationText')
@@ -143,16 +155,8 @@ var Client = IgeClass.extend({
 							.value('')
 							.mount(topNav);
 
-						self.turnText = new IgeUiLabel()
-							.id('turnText')
-							.top(0)
-							.left(15)
-							.width(300)
-							.value('')
-							.mount(topNav);
-
 						
-						var leftNav = new IgeUiElement()
+						self.leftNav = new IgeUiElement()
 							.id('leftNav')
 							.mount(self.uiScene);
 						
@@ -163,11 +167,11 @@ var Client = IgeClass.extend({
 							.right(10)
 							.color('#FFFFFF')
 							.value('Weapon:')
-							.mount(leftNav);
+							.mount(self.leftNav);
 							
 						var selWep = new IgeUiDropDown()
 							.id('weaponsDropDown')
-							.top(30)
+							.top(40)
 							.left(10)
 							.right(10)
 							.options([{
@@ -189,20 +193,20 @@ var Client = IgeClass.extend({
 								text: 'Wrench',
 								value: 'Wrench'
 							}])
-							.mount(leftNav);
+							.mount(self.leftNav);
 
 						new IgeUiLabel()
 							.id('suspectLabel')
-							.top(70)
+							.top(80)
 							.left(10)
 							.right(10)
 							.color('#FFFFFF')
 							.value('Suspect:')
-							.mount(leftNav);
+							.mount(self.leftNav);
 
 						var selChar = new IgeUiDropDown()
 							.id('CharacterDropDown')
-							.top(90)
+							.top(110)
 							.left(10)
 							.right(10)
 							.options([{
@@ -224,20 +228,20 @@ var Client = IgeClass.extend({
 								text: 'Col. Mustard',
 								value: 'Col. Mustard'
 							}])
-							.mount(leftNav);
+							.mount(self.leftNav);
 
 						new IgeUiLabel()
 							.id('roomLabel')
-							.top(130)
+							.top(150)
 							.left(10)
 							.right(10)
 							.color('#FFFFFF')
 							.value('Accusation Room:')
-							.mount(leftNav);
+							.mount(self.leftNav);
 						
 						var selRoom = new IgeUiDropDown()
 							.id('RoomDropDown')
-							.top(150)
+							.top(180)
 							.left(10)
 							.right(10)
 							.options([{
@@ -268,18 +272,18 @@ var Client = IgeClass.extend({
 								text: 'Kitchen',
 								value: 'Kitchen'
 							}])
-							.mount(leftNav);
+							.mount(self.leftNav);
 
 						/* This Button send the command to the server */
 						var suggestButton = new IgeUiButton()
 							.id('suggest-button')
-							.top(190)
+							.top(220)
 							.left(15)
 							.width(80)
 							.height(30)
 							.backgroundColor('#ccc')
 							.value('Suggest')
-							.mount(leftNav);
+							.mount(self.leftNav);
 						suggestButton._mouseUp = function(){
 							ige.network.request('action', {
 								actionType:"suggest", 
@@ -290,13 +294,13 @@ var Client = IgeClass.extend({
 
 						var accuseButton = new IgeUiButton()
 							.id('accuse-button')
-							.top(190)
+							.top(220)
 							.right(15)
 							.width(80)
 							.height(30)
 							.backgroundColor('#ccc')
 							.value('Accuse')
-							.mount(leftNav);
+							.mount(self.leftNav);
 						accuseButton._mouseUp = function(){
 							ige.network.request('action', {
 								actionType:"accuse", 
@@ -309,78 +313,114 @@ var Client = IgeClass.extend({
 
 						var upButton = new IgeUiButton()
 							.id('up-button')
-							.top(260)
+							.top(280)
 							.width(50)
 							.height(30)
 							.value('Up')
 							.backgroundColor('#ccc')
-							.mount(leftNav);
+							.mount(self.leftNav);
 						upButton._mouseUp = function(){
 							ige.network.request('action', {actionType:"up"}, playerMessage)
 						}
 						
 						var leftButton = new IgeUiButton()
 							.id('left-button')
-							.top(300)
+							.top(320)
 							.left(25)
 							.width(50)
 							.height(30)
 							.backgroundColor('#ccc')
 							.value('Left')
-							.mount(leftNav);
+							.mount(self.leftNav);
 						leftButton._mouseUp = function(){
 							ige.network.request('action', {actionType:"left"}, playerMessage)
 						}
 
 						var spButton = new IgeUiButton()
 							.id('sp-button')
-							.top(300)
+							.top(320)
 							.left(87)
 							.width(50)
 							.height(30)
 							.backgroundColor('#ccc')
 							.value('Secret')
-							.mount(leftNav);
+							.mount(self.leftNav);
 						spButton._mouseUp = function(){
 							ige.network.request('action', {actionType:"secretPassage"}, playerMessage)
 						}
 
 						var rightButton = new IgeUiButton()
 							.id('right-button')
-							.top(300)
+							.top(320)
 							.right(25)
 							.width(50)
 							.height(30)
 							.backgroundColor('#ccc')
 							.value('Right')
-							.mount(leftNav);
+							.mount(self.leftNav);
 						rightButton._mouseUp = function(){
 							ige.network.request('action', {actionType:"right"}, playerMessage)
 						}
 
 						var downButton = new IgeUiButton()
 							.id('down-button')
-							.top(340)
+							.top(360)
 							.width(50)
 							.height(30)
 							.backgroundColor('#ccc')
 							.value('Down')
-							.mount(leftNav);
+							.mount(self.leftNav);
 						downButton._mouseUp = function(){
 							ige.network.request('action', {actionType:"down"}, playerMessage)
 						}
 
 					var endButton = new IgeUiButton()
 						.id('end-button')
-						.top(400)
+						.top(420)
 						.width(50)
 						.height(30)
 						.backgroundColor('#ccc')
 						.value('End Turn')
-						.mount(leftNav);
+						.mount(self.leftNav);
 					endButton._mouseUp = function(){
 						ige.network.request('action', {actionType:"endTurn"}, playerMessage)
 					}
+
+					new IgeUiLabel()
+						.id('handLabel')
+						.top(500)
+						.left(15)
+						.right(10)
+						.color('#FFFFFF')
+						.value('Hand:')
+						.mount(self.leftNav);
+
+					self.card1 = new IgeUiLabel()
+						.id('handLabel1')
+						.top(520)
+						.left(30)
+						.right(10)
+						.color('#FFFFFF')
+						.value('card1')
+						.mount(self.leftNav);
+
+					self.card2 = new IgeUiLabel()
+						.id('handLabel2')
+						.top(540)
+						.left(30)
+						.right(10)
+						.color('#FFFFFF')
+						.value('')
+						.mount(self.leftNav);
+
+					self.card3 = new IgeUiLabel()
+						.id('handLabel3')
+						.top(560)
+						.left(30)
+						.right(10)
+						.color('#FFFFFF')
+						.value('')
+						.mount(self.leftNav);
 						
 
 						// Create the main viewport and set the scene
@@ -466,7 +506,7 @@ var Client = IgeClass.extend({
 		/*Register for character name here */
 		ige.network.request('Register', name, self.ClientNetworkEvents._onRegisterCharacter);
 		ige.client.clientCharacter = name;
-	}
+	},
 });
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Client; }
