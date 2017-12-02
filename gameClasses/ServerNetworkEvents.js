@@ -1,3 +1,184 @@
+var actions = {
+	_moveUp: function(data, clientId){
+		
+				var player = ige.server.GameBoard.allPlayers.filter(user => user.playerId == clientId)[0];
+		
+				//if (player.character == ige.server.GameBoard.playerTurn)
+				//{
+				console.log("_moveUp ", player.character);
+				console.log("_moveUp ", player.position[0]);
+				console.log("_moveUp ", player.position[1]);
+				var destX = player.position[0]-1;
+				var destY = player.position[1];
+				console.log("_moveUp ", destX);
+				console.log("_moveUp ", destY);
+				//Player is in a room
+				if(player.isInRoom)
+				{
+					console.log("_moveUp ", "In Room");
+					if (ige.server.GameBoard.canPlayerMoveFromRoom(player.playerId, destX, destY))
+					{
+						console.log("_moveUp ", "success");
+						ige.server.GameBoard.movePlayerFromRoom(player.playerId, destX, destY);
+						ige.server.players[clientId]._translate.tween().stepBy({x:0,y:-120},1000).start();
+						ige.network.send('Notification', {data: player.character + " move from Room to Up"});
+					}
+				}
+				else // or in hall
+				{
+					console.log("_moveUp ", "In Hall");
+					if (ige.server.GameBoard.canPlayerMoveFromHall(player.playerId, destX, destY))
+					{
+						console.log("_moveUp ", "success");
+						ige.server.GameBoard.movePlayerFromHall(player.playerId, destX, destY);
+						ige.server.players[clientId]._translate.tween().stepBy({x:0,y:-120},1000).start();
+						ige.network.send('Notification', {data: player.character + " move from Hall to Up"});
+					}
+				}
+				ige.log("log")
+				console.log(clientId)
+				console.log(data)
+				//}
+			},
+			_moveDown: function(data, clientId){
+		
+				var player = ige.server.GameBoard.allPlayers.filter(user => user.playerId == clientId)[0];
+		
+				//if (player.character == ige.server.GameBoard.playerTurn)
+				//{
+				console.log("_moveDown ", player.character);
+				console.log("_moveDown ", player.position[0]);
+				console.log("_moveDown ", player.position[1]);
+				var destX = player.position[0]+1;
+				var destY = player.position[1];
+				console.log("_moveDown ", destX);
+				console.log("_moveDown ", destY);
+		
+				//Player is in a room
+				if(player.isInRoom)
+				{
+					console.log("_moveDown ", "In Room");
+					if (ige.server.GameBoard.canPlayerMoveFromRoom(player.playerId, destX, destY))
+					{
+						console.log("_moveDown ", "success");
+						ige.server.GameBoard.movePlayerFromRoom(player.playerId, destX, destY);
+						ige.server.players[clientId]._translate.tween().stepBy({x:0,y:120},1000).start();
+						ige.network.send('Notification', {data: player.character + " move from Room to Down"});
+					}
+				}
+				else // or in hall
+				{
+					console.log("_moveDown ", "In Hall");
+					if (ige.server.GameBoard.canPlayerMoveFromHall(player.playerId, destX, destY))
+					{
+						console.log("_moveDown ", "success");
+						ige.server.GameBoard.movePlayerFromHall(player.playerId, destX, destY);
+						ige.server.players[clientId]._translate.tween().stepBy({x:0,y:120},1000).start();
+						ige.network.send('Notification', {data: player.character + " move from Hall to Down"});
+					}
+				}
+		
+				ige.log("log")
+				console.log(clientId)
+				console.log(data)
+				//}
+			},
+			_moveLeft: function(data, clientId){
+		
+				var player = ige.server.GameBoard.allPlayers.filter(user => user.playerId == clientId)[0];
+		
+				//if (player.character == ige.server.GameBoard.playerTurn)
+				//{
+				console.log("_moveLeft ", player.character);
+				console.log("_moveLeft ", player.position[0]);
+				console.log("_moveLeft ", player.position[1]);
+				var destX = player.position[0];
+				var destY = player.position[1]-1;
+				console.log("_moveLeft ", destX);
+				console.log("_moveLeft ", destY);
+		
+				//Player is in a room
+				if(player.isInRoom)
+				{
+					console.log("_moveLeft ", "In Room");
+					if (ige.server.GameBoard.canPlayerMoveFromRoom(player.playerId, destX, destY))
+					{
+						console.log("_moveLeft ", "success");
+						ige.server.GameBoard.movePlayerFromRoom(player.playerId, destX, destY);
+						ige.server.players[clientId]._translate.tween().stepBy({x:-120,y:0},1000).start();
+						ige.network.send('Notification', {data: player.character + " move from Room to Left"});
+					}
+				}
+				else // or in hall
+				{
+					console.log("_moveLeft ", "In Hall");
+					if (ige.server.GameBoard.canPlayerMoveFromHall(player.playerId, destX, destY))
+					{
+						console.log("_moveLeft ", "success");
+						ige.server.GameBoard.movePlayerFromHall(player.playerId, destX, destY);
+						ige.server.players[clientId]._translate.tween().stepBy({x:-120,y:0},1000).start();
+						ige.network.send('Notification', {data: player.character + " move from Hall to Left"});
+					}
+				}
+		
+				ige.log("log")
+				console.log(clientId)
+				console.log(data)
+				//}
+			},
+			_moveRight: function(data, clientId){
+		
+				var player = ige.server.GameBoard.allPlayers.filter(user => user.playerId == clientId)[0];
+		
+				//if (player.character == ige.server.GameBoard.playerTurn)
+				//{
+				console.log("_moveRight ", player.character);
+				console.log("_moveRight ", player.position[0]);
+				console.log("_moveRight ", player.position[1]);
+				var destX = player.position[0];
+				var destY = player.position[1]+1;
+				console.log("_moveRight ", destX);
+				console.log("_moveRight ", destY);
+		
+				//Player is in a room
+				if(player.isInRoom)
+				{
+					console.log("_moveRight ", "In Hall");
+					if (ige.server.GameBoard.canPlayerMoveFromRoom(player.playerId, destX, destY))
+					{
+						console.log("_moveRight ", "success");
+						ige.server.GameBoard.movePlayerFromRoom(player.playerId, destX, destY);
+						ige.server.players[clientId]._translate.tween().stepBy({x:120,y:0},1000).start();
+						ige.network.send('Notification', {data: player.character + " move from Room to Right"});
+					}
+				}
+				else // or in hall
+				{
+					console.log("_moveRight ", "In Hall");
+					if (ige.server.GameBoard.canPlayerMoveFromHall(player.playerId, destX, destY))
+					{
+						console.log("_moveRight ", "success");
+						ige.server.GameBoard.movePlayerFromHall(player.playerId, destX, destY);
+						ige.server.players[clientId]._translate.tween().stepBy({x:120,y:0},1000).start();
+						ige.network.send('Notification', {data: player.character + " move from Hall to Right"});
+					}
+				}
+		
+				ige.log("log")
+				console.log(clientId)
+				console.log(data)
+				//}
+			},
+		
+			_suggest: function (data, clientId) {
+		
+			},
+		
+			_accuse: function (data, clientId) {
+				
+			},
+}
+
 var ServerNetworkEvents = {
 	/**
 	 * Is called when the network tells us a new client has connected
@@ -27,175 +208,30 @@ var ServerNetworkEvents = {
 			delete ige.server.players[clientId];
 		}
 	},
-	_moveUp: function(data, clientId){
+	
 
-		var player = ige.server.GameBoard.allPlayers.filter(user => user.playerId == clientId)[0];
 
-		//if (player.character == ige.server.GameBoard.playerTurn)
-		//{
-    	console.log("_moveUp ", player.character);
-    	console.log("_moveUp ", player.position[0]);
-    	console.log("_moveUp ", player.position[1]);
-		var destX = player.position[0]-1;
-		var destY = player.position[1];
-    	console.log("_moveUp ", destX);
-    	console.log("_moveUp ", destY);
-    	//Player is in a room
-    	if(player.isInRoom)
-    	{
-    		console.log("_moveUp ", "In Room");
-    		if (ige.server.GameBoard.canPlayerMoveFromRoom(player.playerId, destX, destY))
-    		{
-    			console.log("_moveUp ", "success");
-    			ige.server.GameBoard.movePlayerFromRoom(player.playerId, destX, destY);
-    			ige.server.players[clientId]._translate.tween().stepBy({x:0,y:-120},1000).start();
-				ige.network.send('Notification', {data: player.character + " move from Room to Up"});
-    		}
-    	}
-    	else // or in hall
-    	{
-    		console.log("_moveUp ", "In Hall");
-    		if (ige.server.GameBoard.canPlayerMoveFromHall(player.playerId, destX, destY))
-    		{
-    			console.log("_moveUp ", "success");
-    			ige.server.GameBoard.movePlayerFromHall(player.playerId, destX, destY);
-				ige.server.players[clientId]._translate.tween().stepBy({x:0,y:-120},1000).start();
-				ige.network.send('Notification', {data: player.character + " move from Hall to Up"});
-    		}
-    	}
-		ige.log("log")
-		console.log(clientId)
-		console.log(data)
-		//}
-	},
-	_moveDown: function(data, clientId){
-
-		var player = ige.server.GameBoard.allPlayers.filter(user => user.playerId == clientId)[0];
-
-		//if (player.character == ige.server.GameBoard.playerTurn)
-		//{
-    	console.log("_moveDown ", player.character);
-    	console.log("_moveDown ", player.position[0]);
-    	console.log("_moveDown ", player.position[1]);
-		var destX = player.position[0]+1;
-		var destY = player.position[1];
-    	console.log("_moveDown ", destX);
-    	console.log("_moveDown ", destY);
-
-    	//Player is in a room
-    	if(player.isInRoom)
-    	{
-    		console.log("_moveDown ", "In Room");
-    		if (ige.server.GameBoard.canPlayerMoveFromRoom(player.playerId, destX, destY))
-    		{
-    			console.log("_moveDown ", "success");
-    			ige.server.GameBoard.movePlayerFromRoom(player.playerId, destX, destY);
-				ige.server.players[clientId]._translate.tween().stepBy({x:0,y:120},1000).start();
-				ige.network.send('Notification', {data: player.character + " move from Room to Down"});
-    		}
-    	}
-    	else // or in hall
-    	{
-    		console.log("_moveDown ", "In Hall");
-    		if (ige.server.GameBoard.canPlayerMoveFromHall(player.playerId, destX, destY))
-    		{
-    			console.log("_moveDown ", "success");
-    			ige.server.GameBoard.movePlayerFromHall(player.playerId, destX, destY);
-				ige.server.players[clientId]._translate.tween().stepBy({x:0,y:120},1000).start();
-				ige.network.send('Notification', {data: player.character + " move from Hall to Down"});
-    		}
-    	}
-
-		ige.log("log")
-		console.log(clientId)
-		console.log(data)
-		//}
-	},
-	_moveLeft: function(data, clientId){
-
-		var player = ige.server.GameBoard.allPlayers.filter(user => user.playerId == clientId)[0];
-
-		//if (player.character == ige.server.GameBoard.playerTurn)
-		//{
-    	console.log("_moveLeft ", player.character);
-    	console.log("_moveLeft ", player.position[0]);
-    	console.log("_moveLeft ", player.position[1]);
-		var destX = player.position[0];
-		var destY = player.position[1]-1;
-    	console.log("_moveLeft ", destX);
-    	console.log("_moveLeft ", destY);
-
-    	//Player is in a room
-    	if(player.isInRoom)
-    	{
-    		console.log("_moveLeft ", "In Room");
-    		if (ige.server.GameBoard.canPlayerMoveFromRoom(player.playerId, destX, destY))
-    		{
-    			console.log("_moveLeft ", "success");
-    			ige.server.GameBoard.movePlayerFromRoom(player.playerId, destX, destY);
-				ige.server.players[clientId]._translate.tween().stepBy({x:-120,y:0},1000).start();
-				ige.network.send('Notification', {data: player.character + " move from Room to Left"});
-    		}
-    	}
-    	else // or in hall
-    	{
-    		console.log("_moveLeft ", "In Hall");
-    		if (ige.server.GameBoard.canPlayerMoveFromHall(player.playerId, destX, destY))
-    		{
-    			console.log("_moveLeft ", "success");
-    			ige.server.GameBoard.movePlayerFromHall(player.playerId, destX, destY);
-				ige.server.players[clientId]._translate.tween().stepBy({x:-120,y:0},1000).start();
-				ige.network.send('Notification', {data: player.character + " move from Hall to Left"});
-    		}
-    	}
-
-		ige.log("log")
-		console.log(clientId)
-		console.log(data)
-		//}
-	},
-	_moveRight: function(data, clientId){
-
-		var player = ige.server.GameBoard.allPlayers.filter(user => user.playerId == clientId)[0];
-
-		//if (player.character == ige.server.GameBoard.playerTurn)
-		//{
-    	console.log("_moveRight ", player.character);
-    	console.log("_moveRight ", player.position[0]);
-    	console.log("_moveRight ", player.position[1]);
-		var destX = player.position[0];
-		var destY = player.position[1]+1;
-    	console.log("_moveRight ", destX);
-    	console.log("_moveRight ", destY);
-
-    	//Player is in a room
-    	if(player.isInRoom)
-    	{
-    		console.log("_moveRight ", "In Hall");
-    		if (ige.server.GameBoard.canPlayerMoveFromRoom(player.playerId, destX, destY))
-    		{
-    			console.log("_moveRight ", "success");
-    			ige.server.GameBoard.movePlayerFromRoom(player.playerId, destX, destY);
-				ige.server.players[clientId]._translate.tween().stepBy({x:120,y:0},1000).start();
-				ige.network.send('Notification', {data: player.character + " move from Room to Right"});
-    		}
-    	}
-    	else // or in hall
-    	{
-    		console.log("_moveRight ", "In Hall");
-    		if (ige.server.GameBoard.canPlayerMoveFromHall(player.playerId, destX, destY))
-    		{
-    			console.log("_moveRight ", "success");
-    			ige.server.GameBoard.movePlayerFromHall(player.playerId, destX, destY);
-				ige.server.players[clientId]._translate.tween().stepBy({x:120,y:0},1000).start();
-				ige.network.send('Notification', {data: player.character + " move from Hall to Right"});
-    		}
-    	}
-
-		ige.log("log")
-		console.log(clientId)
-		console.log(data)
-		//}
+	_onPlayerAction: function(data, clientId){
+		switch (data.actionType) {
+			case 'up':
+				actions._moveUp(data, clientId);
+				break;
+			case 'down':
+				actions._moveDown(data, clientId);
+				break;
+			case 'left':
+				actions._moveLeft(data, clientId);
+				break;
+			case 'right':
+				actions._moveRight(data, clientId);
+				break;
+			case 'suggest':
+				actions._suggest(data, clientId);
+				break;
+			case 'accuse':
+				actions._accuse(data, clientId);
+				break;
+		}
 	},
 
 	_onPlayerEntity: function (data, clientId, requestId) {
@@ -252,32 +288,6 @@ var ServerNetworkEvents = {
 				}
 			}
 		}
-	},
-
-	_onPlayerLeftDown: function (data, clientId) {
-
-		console.log("_onPlayerEntity ", clientId);
-		ige.server.players[clientId].controls.left = true;
-	},
-
-	_onPlayerLeftUp: function (data, clientId) {
-		ige.server.players[clientId].controls.left = false;
-	},
-
-	_onPlayerRightDown: function (data, clientId) {
-		ige.server.players[clientId].controls.right = true;
-	},
-
-	_onPlayerRightUp: function (data, clientId) {
-		ige.server.players[clientId].controls.right = false;
-	},
-
-	_onPlayerThrustDown: function (data, clientId) {
-		ige.server.players[clientId].controls.thrust = true;
-	},
-
-	_onPlayerThrustUp: function (data, clientId) {
-		ige.server.players[clientId].controls.thrust = false;
 	},
 
 	_onPlayerAvailable: function (data, clientId, requestId) {

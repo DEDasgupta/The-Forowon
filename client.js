@@ -88,35 +88,6 @@ var Client = IgeClass.extend({
 							'width': 225,
 							'bottom': 0
 						});
-						
-						
-						ige.ui.style('#button3', {
-							'width': 80,
-							'height': 30,
-							'top': 180,
-							'left': 15,
-							'backgroundColor': '#ccc'
-						});
-						ige.ui.style('#up-button', {
-							'width': 50,
-							'height': 30,
-							'backgroundColor': '#ccc'
-						});
-						ige.ui.style('#down-button', {
-							'width': 50,
-							'height': 30,
-							'backgroundColor': '#ccc'
-						});
-						ige.ui.style('#left-button', {
-							'width': 50,
-							'height': 30,
-							'backgroundColor': '#ccc'
-						});
-						ige.ui.style('#right-button', {
-							'width': 50,
-							'height': 30,
-							'backgroundColor': '#ccc'
-						});
 
 						ige.ui.style('IgeUiTextBox', {
 							'backgroundColor': '#ffffff',
@@ -154,84 +125,174 @@ var Client = IgeClass.extend({
 						var topNav = new IgeUiElement()
 							.id('topNav')
 							.mount(self.uiScene);
-						
-						var leftNav = new IgeUiElement()
-							.id('leftNav')
-							.mount(self.uiScene);
-						
-						new IgeUiDropDown()
-							.id('optionsDropDown')
-							.top(10)
-							.left(10)
-							.right(10)
-							.options([{
-								text: 'Test 1',
-								value: 'test1'
-							}, {
-								text: 'Test 2',
-								value: 'test2'
-							}, {
-								text: 'Test 3',
-								value: 'test3'
-							}])
-							.mount(leftNav);
-
-						var upButton = new IgeUiButton()
-							.id('up-button')
-							.top(260)
-							.value('Up')
-							.mount(leftNav);
-						upButton._mouseUp = function(){
-							ige.network.send('moveUp', {data:"hihi"})
-						}
-						
-						var leftButton = new IgeUiButton()
-							.id('left-button')
-							.top(300)
-							.left(50)
-							.value('Left')
-							.mount(leftNav);
-						leftButton._mouseUp = function(){
-							ige.network.send('moveLeft', {data:"hihi"})
-						}
-
-						var rightButton = new IgeUiButton()
-							.id('right-button')
-							.top(300)
-							.right(50)
-							.value('Right')
-							.mount(leftNav);
-						rightButton._mouseUp = function(){
-							ige.network.send('moveRight', {data:"hihi"})
-						}
-
-						var downButton = new IgeUiButton()
-							.id('down-button')
-							.top(340)
-							.value('Down')
-							.mount(leftNav);
-						downButton._mouseUp = function(){
-								ige.network.send('moveDown', {data:"hihi"})
-							}
-
-						this.commandText = new IgeUiTextBox()
-							.id('textBox1')
-							.value('')
-							.mount(leftNav);
 
 						self.notificationText = new IgeUiTextBox()
 							.id('textBox2')
 							.value('')
 							.mount(topNav);
 
-						/* This Button send the command to the server */
-						var sendButton = new IgeUiButton()
-							.id('button3')
-							.value('Send')
+						
+						var leftNav = new IgeUiElement()
+							.id('leftNav')
+							.mount(self.uiScene);
+						
+						new IgeUiLabel()
+							.id('weaponLabel')
+							.top(10)
+							.left(10)
+							.right(10)
+							.color('#FFFFFF')
+							.value('Weapon:')
 							.mount(leftNav);
-							sendButton._mouseUp = function(){
-								ige.network.send(this.commandText._value, {data:"hihi"})
+							
+						var selWep = new IgeUiDropDown()
+							.id('weaponsDropDown')
+							.top(30)
+							.left(10)
+							.right(10)
+							.options([{
+								text: 'Candlestick',
+								value: 'Candlestick'
+							}, {
+								text: 'Knife',
+								value: 'Knife'
+							}, {
+								text: 'Lead Pipe',
+								value: 'Lead Pipe'
+							}, {
+								text: 'Revolver',
+								value: 'Revolver'
+							}, {
+								text: 'Rope',
+								value: 'Rope'
+							}, {
+								text: 'Wrench',
+								value: 'Wrench'
+							}])
+							.mount(leftNav);
+
+						new IgeUiLabel()
+							.id('suspectLabel')
+							.top(70)
+							.left(10)
+							.right(10)
+							.color('#FFFFFF')
+							.value('Suspect:')
+							.mount(leftNav);
+
+						var selChar = new IgeUiDropDown()
+							.id('CharacterDropDown')
+							.top(90)
+							.left(10)
+							.right(10)
+							.options([{
+								text: 'Miss Scarlet',
+								value: 'Miss Scarlet'
+							}, {
+								text: 'Prof Plum',
+								value: 'Prof Plum'
+							}, {
+								text: 'Mrs. Peacock',
+								value: 'Mrs. Peacock'
+							}, {
+								text: 'Mr. Green',
+								value: 'Mr. Green'
+							}, {
+								text: 'Mrs. White',
+								value: 'Mrs. White'
+							}, {
+								text: 'Col. Mustard',
+								value: 'Col. Mustard'
+							}])
+							.mount(leftNav);
+							selChar._mouseUp = function(){
+								console.log(selChar._value.value)
+							};
+
+						var upButton = new IgeUiButton()
+							.id('up-button')
+							.top(260)
+							.width(50)
+							.height(30)
+							.value('Up')
+							.backgroundColor('#ccc')
+							.mount(leftNav);
+						upButton._mouseUp = function(){
+							ige.network.send('action', {actionType:"up"})
+						}
+						
+						var leftButton = new IgeUiButton()
+							.id('left-button')
+							.top(300)
+							.left(50)
+							.width(50)
+							.height(30)
+							.backgroundColor('#ccc')
+							.value('Left')
+							.mount(leftNav);
+						leftButton._mouseUp = function(){
+							ige.network.send('action', {actionType:"left"})
+						}
+
+						var rightButton = new IgeUiButton()
+							.id('right-button')
+							.top(300)
+							.right(50)
+							.width(50)
+							.height(30)
+							.backgroundColor('#ccc')
+							.value('Right')
+							.mount(leftNav);
+						rightButton._mouseUp = function(){
+							ige.network.send('action', {actionType:"right"})
+						}
+
+						var downButton = new IgeUiButton()
+							.id('down-button')
+							.top(340)
+							.width(50)
+							.height(30)
+							.backgroundColor('#ccc')
+							.value('Down')
+							.mount(leftNav);
+						downButton._mouseUp = function(){
+								ige.network.send('action', {actionType:"down"})
 							}
+
+						/* This Button send the command to the server */
+						var suggestButton = new IgeUiButton()
+							.id('suggest-button')
+							.top(150)
+							.left(15)
+							.width(80)
+							.height(30)
+							.backgroundColor('#ccc')
+							.value('Suggest')
+							.mount(leftNav);
+						suggestButton._mouseUp = function(){
+							ige.network.send('action', {
+								actionType:"suggest", 
+								suspect: selChar._value.value, 
+								weapon: selWep._value.value
+							})
+						}
+
+						var accuseButton = new IgeUiButton()
+							.id('accuse-button')
+							.top(150)
+							.right(15)
+							.width(80)
+							.height(30)
+							.backgroundColor('#ccc')
+							.value('Accuse')
+							.mount(leftNav);
+						suggestButton._mouseUp = function(){
+							ige.network.send('action', {
+								actionType:"accuse", 
+								suspect: selChar._value.value, 
+								weapon: selWep._value.value
+							})
+						}
 						
 
 						// Create the main viewport and set the scene
@@ -295,14 +356,14 @@ var Client = IgeClass.extend({
 						ige.watchStart(self.custom4);
 						
 						var playerMessage = function(data){
-							ige.log("log")
 							console.log(data)
+							if (data.valid == false) {
+								alert(data.message)
+							}
+							
 						}
 
-						ige.network.define('moveUp', playerMessage);
-						ige.network.define('moveRight', playerMessage);
-						ige.network.define('moveLeft', playerMessage);
-						ige.network.define('moveDown', playerMessage);
+						ige.network.define('action', playerMessage);
 						ige.network.define('Notification', self._onNotification);
 
 						//ige.network.send('player_message', {data:"hihi"})

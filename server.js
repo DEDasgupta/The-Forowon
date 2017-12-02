@@ -45,10 +45,7 @@ var Server = IgeClass.extend({
 					if (success) {
 						//ige.chat.createRoom('The Lobby', {}, 'lobby');
 						ige.network.define('player_message', self._playerMessage)
-						ige.network.define('moveUp', self._moveUp)
-						ige.network.define('moveDown', self._moveDown)
-						ige.network.define('moveLeft', self._moveLeft)
-						ige.network.define('moveRight', self._moveRight)
+						ige.network.define('action', self._onPlayerAction)
 						// Create some network commands we will need
 						ige.network.define('playerEntity', self._onPlayerEntity);
 
