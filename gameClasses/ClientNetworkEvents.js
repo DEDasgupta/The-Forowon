@@ -62,7 +62,11 @@ var ClientNetworkEvents = {
 
 	_onNotification: function (cmd, data) {
 		ige.client.notificationText.value(cmd.data);
-	}
+	},
+
+	_onServerAlert: function (data) {
+		alert(data);
+	},
 	
 };
 

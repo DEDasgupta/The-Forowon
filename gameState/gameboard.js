@@ -1,7 +1,7 @@
 //import {CaseFile} from "./CaseFile";
 
-var CluelessPlayer = require('./CluelessPlayer');
-var CaseFile = require('./CaseFile');
+var CluelessPlayer = require("./CluelessPlayer");
+var CaseFile = require("./CaseFile");
 
 class GameBoard {
     constructor() {
@@ -13,6 +13,16 @@ class GameBoard {
             [1, 0, 0, 0, 0],
             [0, 1, 0, 1, 0]
         ];
+
+        this.roomGrid = [
+            ["Study","Hallway","Hall","Hallway","Lounge"],
+            ["Hallway","","Hallway","","Hallway"],
+            ["Library","Hallway","Billiard Room","Hallway","Dining Room"],
+            ["Hallway","","Hallway","","Hallway"],
+            ["Conservatory","Hallway","Ballroom","Hallway","Kitchen"]
+        ];
+
+        this.roomsMap = {"Study":true,"Hall":true,"Lounge":true,"Library":true,"Billiard Room":true,"Dining Room":true,"Conservatory":true,"Ballroom":true,"Kitchen":true};
 
         this.rooms = [
             {name: "Study", position: [0, 0], exits: [[0,1], [1,0], [4,4]]},
@@ -130,6 +140,33 @@ class GameBoard {
 }
 module.exports = GameBoard;
 
+GameBoard.prototype.validateSuggestion = function(splayer, data){
+    var suggestionCards = [data.weapon, data.room, data.suspect];
+    var part1 = splayer.character + " suggested that " + data.suspect + " used a " + data.weapon + " in the " + data.room;
+    var part2 = " and no other player can disprove this suggestion";
+    for (playerIndex in this.allPlayers) {
+        var player = this.allPlayers[playerIndex];
+        if (player.playerId != splayer.playerId) {
+            for (cardIndex in player.hand) {
+                var card = player.hand[cardIndex];
+                for (scIndex in suggestionCards) {
+                    var sc = suggestionCards[scIndex];
+                    if (sc === card) {
+                        part2 = " but " + player.character + " holds the card " + card;
+                    }
+                }
+            }
+        }
+    }
+    for (i; i < 6; i++) {
+        var player = this.allPlayers[i]
+        if (player.playerId != playerId && player.character === data.suspect) {
+            // move suggested player
+        }
+    }
+    return part1 + part2
+}
+
 GameBoard.prototype.canPlayerMoveFromRoom = function(playerId, destX, destY){
     //Outside of available spaces
     if(destX < 0 || destX > 4 || destY < 0 || destY > 4) return false;
@@ -139,7 +176,7 @@ GameBoard.prototype.canPlayerMoveFromRoom = function(playerId, destX, destY){
 
     var player = this.allPlayers.filter(user => user.playerId == playerId)[0];
 
-    //Player isn't even in a room
+    //Player isn"t even in a room
     if(player.isInRoom == false) return false;
 
 
@@ -152,7 +189,7 @@ GameBoard.prototype.canPlayerMoveFromRoom = function(playerId, destX, destY){
             break;
         }
     }
-    //Didn't find room in matching position.
+    //Didn"t find room in matching position.
     if(roomArray == null) return false;
 
     //Room player is standing in has an open hall or secret passage to a room
@@ -177,7 +214,12 @@ GameBoard.prototype.movePlayerFromRoom = function(playerId, destX, destY){
     player.position = [destX, destY];
 
     //update player isInRoom
-    player.isInRoom = false;
+    var newRoom = this.roomGrid[player.position[0]][player.position[1]]
+    if (this.roomsMap[newRoom]) {
+        player.isInRoom = true;
+    } else {
+        player.isInRoom = false;
+    }
     for (var i = 0; i < this.rooms.length; i++){
         if (this.rooms[i].position[0] == destX && this.rooms[i].position[1] == destY)
         {
@@ -196,7 +238,7 @@ GameBoard.prototype.canPlayerMoveFromHall= function(playerId, destX, destY){
 
     var player = this.allPlayers.filter(user => user.playerId == playerId)[0];
 
-    //Player isn't even in a hall
+    //Player isn"t even in a hall
     if(player.isInRoom == true) return false;
 
     var hallArray = null;
@@ -208,7 +250,7 @@ GameBoard.prototype.canPlayerMoveFromHall= function(playerId, destX, destY){
             break;
         }
     }
-    //Didn't find room in matching position.
+    //Didn"t find room in matching position.
     if(hallArray == null) return false;
 
     //Hall player is standing in has an open room adjacent
