@@ -198,11 +198,11 @@ var actions = {
 					result.valid = true;
 				} else if (px == 0 && py == 4) {
 					ige.server.GameBoard.movePlayerFromHall(player.playerId, 4, 0);
-					ige.server.players[clientId]._translate.tween().stepBy({x:480,y:-480},1000).start();
+					ige.server.players[clientId]._translate.tween().stepBy({x:-480,y:480},1000).start();
 					result.valid = true;
 				} else if (px == 4 && py == 0) {
 					ige.server.GameBoard.movePlayerFromHall(player.playerId, 0, 4);
-					ige.server.players[clientId]._translate.tween().stepBy({x:-480,y:480},1000).start();
+					ige.server.players[clientId]._translate.tween().stepBy({x:480,y:-480},1000).start();
 					result.valid = true;
 				} else if (px == 4 && py == 4) {
 					ige.server.GameBoard.movePlayerFromHall(player.playerId, 0, 0);
