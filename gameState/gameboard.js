@@ -174,6 +174,11 @@ GameBoard.prototype.validateSuggestion = function(splayer, data){
 }
 
 GameBoard.prototype.validateAccusation = function(splayer, data){
+    console.log(this.caseFile)
+    if (this.caseFile.suspect === data.suspect && this.caseFile.weapon === data.weapon && this.caseFile.room === data.room) {
+        return true;
+    }
+    return false;
 
 }
 

@@ -230,7 +230,18 @@ var actions = {
 			},
 		
 			_accuse: function (data, clientId, requestId) {
-				
+				var player = ige.server.GameBoard.allPlayers.filter(user => user.playerId == clientId)[0];
+				var result = {valid:true, message:""};
+				var message = "accused " + data.suspect + " of using " + data.weapon + " in " + data.room;
+				result.valid = true;
+				var victory = ige.server.GameBoard.validateAccusation(player, data);
+
+				if (victory) {
+					ige.network.send('Alert', player.character + " CORRECTLY " + message);
+				} else {
+					ige.network.send('Alert', player.character + " INCORRECTLY " + message);
+				}
+				ige.network.response(requestId, result);
 			},
 
 			_endTurn: function (data, clientId, requestId) {
@@ -413,7 +424,7 @@ var ServerNetworkEvents = {
 				}
 				break;
 			case "Plum":
-			case "Prof Plum":
+			case "Professor Plum":
 				if (ige.server.characterSet[5] == false)
 				{
 					success = true;
