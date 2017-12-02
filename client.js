@@ -209,8 +209,8 @@ var Client = IgeClass.extend({
 								text: 'Miss Scarlet',
 								value: 'Miss Scarlet'
 							}, {
-								text: 'Prof Plum',
-								value: 'Prof Plum'
+								text: 'Professor Plum',
+								value: 'Professor Plum'
 							}, {
 								text: 'Mrs. Peacock',
 								value: 'Mrs. Peacock'

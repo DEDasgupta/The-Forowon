@@ -12,6 +12,7 @@ var Server = IgeClass.extend({
 		// Define an object to hold references to our player entities
 		this.players = {};
 		this.playersMap = {};
+		this.playersNameMap = {}
 		this.playerList= {};
 		this.characterSet = new Array(6).fill(false);
 		this.numOfPlayers = 0;
@@ -86,36 +87,42 @@ var Server = IgeClass.extend({
 							.id('Scarlet')
 							.streamMode(1)
 							.mount(baseScene);
+						self.playersNameMap['Scarlet'] = self.playerList[0];
 								
 						// Mustard					
 						self.playerList[1] = new Player()
 							.id('Mustard')
 							.streamMode(1)
-							.mount(baseScene);		
+							.mount(baseScene);
+						self.playersNameMap['Mustard'] = self.playerList[1];	
 
 						// White
 						self.playerList[2] = new Player()
 							.id('White')
 							.streamMode(1)
-							.mount(baseScene);				
+							.mount(baseScene);		
+						self.playersNameMap['White'] = self.playerList[2];		
 
 						// Green
 						self.playerList[3] = new Player()
 							.id('Green')
 							.streamMode(1)
-							.mount(baseScene);				
+							.mount(baseScene);		
+						self.playersNameMap['Green'] = self.playerList[3];		
 
 						// Peacock
 						self.playerList[4] = new Player()
 							.id('Peacock')
 							.streamMode(1)
 							.mount(baseScene);				
+						self.playersNameMap['Peacock'] = self.playerList[4];
 
 						// Plum
 						self.playerList[5] = new Player()
 							.id('Plum')
 							.streamMode(1)
 							.mount(baseScene);
+						self.playersNameMap['Plum'] = self.playerList[5];
 
 						// Create the scene
 						self.mainScene = new IgeScene2d()

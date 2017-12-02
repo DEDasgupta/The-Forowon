@@ -53,12 +53,12 @@ class GameBoard {
 
         // the character name must match with the server name list
         this.characters = [
-            {name: "Miss Scarlet", position: [0, 3]},
-            {name: "Professor Plum", position: [1, 0]},
-            {name: "Mrs. Peacock", position: [3, 0]},
-            {name: "Mr. Green", position: [4, 1]},
-            {name: "Mrs. White", position: [4, 3]},
-            {name: "Col. Mustard", position: [1, 4]}
+            {name: "Miss Scarlet", short: "Scarlet", position: [0, 3]},
+            {name: "Professor Plum", short: "Plum", position: [1, 0]},
+            {name: "Mrs. Peacock", short: "Peacock", position: [3, 0]},
+            {name: "Mr. Green", short: "Green", position: [4, 1]},
+            {name: "Mrs. White", short: "White", position: [4, 3]},
+            {name: "Col. Mustard", short: "Mustard", position: [1, 4]}
         ];
 
         this.weapons = ["Candlestick", "Knife", "Lead Pipe", "Revolver", "Rope", "Wrench"];
@@ -158,13 +158,23 @@ GameBoard.prototype.validateSuggestion = function(splayer, data){
             }
         }
     }
-    for (i; i < 6; i++) {
-        var player = this.allPlayers[i]
-        if (player.playerId != playerId && player.character === data.suspect) {
-            // move suggested player
-        }
-    }
+    console.log(this.allPlayers)
+    var movePlayer = this.allPlayers.filter(user => user.character == data.suspect)[0];
+    var moveRoom = this.rooms.filter(room => room.name == data.room)[0];
+    var moveChar = this.characters.filter(char => char.name == data.suspect)[0]
+    console.log(movePlayer);
+    var delta = [movePlayer.position[0]-moveRoom.position[0],movePlayer.position[1]-moveRoom.position[1]]
+    console.log(delta)
+    ige.server.playersNameMap[moveChar.short]._translate.tween().stepBy({x:delta[1]*-120,y:delta[0]*-120},1000).start();
+    this.grid[movePlayer.position[0]][movePlayer.position[1]] = 0;
+    movePlayer.position = [moveRoom.position[0],moveRoom.position[1]];
+    movePlayer.isInRoom = true;
+    
     return part1 + part2
+}
+
+GameBoard.prototype.validateAccusation = function(splayer, data){
+
 }
 
 GameBoard.prototype.canPlayerMoveFromRoom = function(playerId, destX, destY){
