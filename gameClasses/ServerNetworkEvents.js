@@ -14,6 +14,8 @@ var ServerNetworkEvents = {
 
 	_onPlayerDisconnect: function (clientId) {
 		if (ige.server.players[clientId]) {
+			ige.server.numOfPlayers--;
+
 			var index = ige.server.playersMap[clientId];
 
 			// reset the character
@@ -27,12 +29,14 @@ var ServerNetworkEvents = {
 			delete ige.server.players[clientId];
 		}
 	},
+
 	_moveUp: function(data, clientId){
 
 		var player = ige.server.GameBoard.allPlayers.filter(user => user.playerId == clientId)[0];
 
-		//if (player.character == ige.server.GameBoard.playerTurn)
-		//{
+		debugger;
+		if (ige.server.GameBoard.isPlayerAllowToMove(player))
+		{
     	console.log("_moveUp ", player.character);
     	console.log("_moveUp ", player.position[0]);
     	console.log("_moveUp ", player.position[1]);
@@ -66,14 +70,14 @@ var ServerNetworkEvents = {
 		ige.log("log")
 		console.log(clientId)
 		console.log(data)
-		//}
+		}
 	},
 	_moveDown: function(data, clientId){
 
 		var player = ige.server.GameBoard.allPlayers.filter(user => user.playerId == clientId)[0];
 
-		//if (player.character == ige.server.GameBoard.playerTurn)
-		//{
+		if (ige.server.GameBoard.isPlayerAllowToMove(player))
+		{
     	console.log("_moveDown ", player.character);
     	console.log("_moveDown ", player.position[0]);
     	console.log("_moveDown ", player.position[1]);
@@ -109,14 +113,15 @@ var ServerNetworkEvents = {
 		ige.log("log")
 		console.log(clientId)
 		console.log(data)
-		//}
+		}
 	},
 	_moveLeft: function(data, clientId){
 
 		var player = ige.server.GameBoard.allPlayers.filter(user => user.playerId == clientId)[0];
 
-		//if (player.character == ige.server.GameBoard.playerTurn)
-		//{
+		debugger;
+		if (ige.server.GameBoard.isPlayerAllowToMove(player))
+		{
     	console.log("_moveLeft ", player.character);
     	console.log("_moveLeft ", player.position[0]);
     	console.log("_moveLeft ", player.position[1]);
@@ -152,14 +157,14 @@ var ServerNetworkEvents = {
 		ige.log("log")
 		console.log(clientId)
 		console.log(data)
-		//}
+		}
 	},
 	_moveRight: function(data, clientId){
 
 		var player = ige.server.GameBoard.allPlayers.filter(user => user.playerId == clientId)[0];
 
-		//if (player.character == ige.server.GameBoard.playerTurn)
-		//{
+		if (ige.server.GameBoard.isPlayerAllowToMove(player))
+		{
     	console.log("_moveRight ", player.character);
     	console.log("_moveRight ", player.position[0]);
     	console.log("_moveRight ", player.position[1]);
@@ -195,7 +200,62 @@ var ServerNetworkEvents = {
 		ige.log("log")
 		console.log(clientId)
 		console.log(data)
-		//}
+		}
+	},
+
+	_moveRoom: function(data, clientId){
+
+		var player = ige.server.GameBoard.allPlayers.filter(user => user.playerId == clientId)[0];
+
+		debugger;
+		if (ige.server.GameBoard.isPlayerAllowToMove(player))
+		{
+	    	console.log("_moveRoom ", player.character);
+	    	console.log("_moveRoom ", player.position[0]);
+	    	console.log("_moveRoom ", player.position[1]);
+
+	    	var destRoom = ige.server.GameBoard.rooms.filter(room => room.name == data)[0];
+	    	if (destRoom != null)
+	    	{
+
+	    	console.log("_moveRoom ", destRoom.position[0]);
+	    	console.log("_moveRoom ", destRoom.position[1]);
+
+	    	var destX = destRoom.position[0];
+	    	var destY = destRoom.position[1];
+
+	    	var deltaX = destX - player.position[0];
+	    	var deltaY = destY - player.position[1];
+
+	    	//Player is in a room
+	    	if(player.isInRoom)
+	    	{
+	    		console.log("_moveRoom ", "In Hall");
+	    		if (ige.server.GameBoard.canPlayerMoveFromRoom(player.playerId, destX, destY))
+	    		{
+	    			console.log("_moveRoom ", "success");
+	    			ige.server.GameBoard.movePlayerFromRoom(player.playerId, destX, destY);
+					ige.server.players[clientId]._translate.tween().stepBy({x:120*destX,y:120*deltaY},1000).start();
+					ige.network.send('Notification', {data: player.character + " move from Room to Right"});
+	    		}
+	    	}
+	    	else // or in hall
+	    	{
+	    		console.log("_moveRoom ", "In Hall");
+	    		if (ige.server.GameBoard.canPlayerMoveFromHall(player.playerId, destX, destY))
+	    		{
+	    			console.log("_moveRoom ", "success");
+	    			ige.server.GameBoard.movePlayerFromHall(player.playerId, destX, destY);
+					ige.server.players[clientId]._translate.tween().stepBy({x:120*deltaX,y:0*deltaY},1000).start();
+					ige.network.send('Notification', {data: player.character + " move from Hall to Right"});
+	    		}
+	    	}
+
+			ige.log("log")
+			console.log(clientId)
+			console.log(data)
+			}
+		}
 	},
 
 	_onPlayerEntity: function (data, clientId, requestId) {
@@ -215,11 +275,11 @@ var ServerNetworkEvents = {
 				ige.server.playersMap[clientId] = index;
 				if (!ige.server.players[clientId]) 
 				{
-				console.log("_onPlayerEntity ", clientId);
-				ige.server.players[clientId] = ige.server.playerList[index];
+					console.log("_onPlayerEntity ", clientId);
+					ige.server.players[clientId] = ige.server.playerList[index];
 
-				// Tell the client to track their player entity
-				ige.network.response(requestId, ige.server.players[clientId].id());
+					// Tell the client to track their player entity
+					ige.network.response(requestId, ige.server.players[clientId].id());
 				}
 				break;
 			}
@@ -234,23 +294,40 @@ var ServerNetworkEvents = {
 
 				// save the ID to gameboard and active player
 				ige.server.GameBoard.allPlayers[index].playerId = clientId;
-				ige.server.GameBoard.activePlayers.push(ige.server.GameBoard.allPlayers[index])
+				ige.server.GameBoard.activePlayers[index].isActive = true;
 				break;
 			}
 		}
 
 		// If we get at least 4 players, start the game
-		if (ige.server.numOfPlayers >= 4)
+		// check for playerTurn to ensure we not process this again if more
+		// people connecting to after game has started
+		if (ige.server.numOfPlayers >= 4 && ige.server.GameBoard.playerTurn == "")
 		{
 			// start the game
-			for (index = 0; index < 6; index++)
+			for (index = 0; index < ige.server.GameBoard.activePlayers.length; index++)
 			{
-				if (ige.server.characterSet[index])
+				if (ige.server.GameBoard.activePlayers[index].isActive)
 				{
-					ige.server.GameBoard.playerTurn = ige.server.characterNames[index];
-					ige.network.send('Notification', {data: ige.server.characterNames[index]+ " player Turn"});
+					debugger;
+					ige.server.GameBoard.playerTurn = ige.server.GameBoard.activePlayers[index].character;
+					ige.network.send('Notification', {data: ige.server.GameBoard.playerTurn + " player Turn"});
+
+					// cutoff the array start at the player turn
+					// then concatenate to the end, so that next turn
+					// we can just iterate the array from the beginning
+					if (index != 5)
+					{
+						var cutoff = ige.server.GameBoard.activePlayers.slice(index+1);
+						ige.server.GameBoard.activePlayers.concat(cutoff);
+					}
+					break;
 				}
 			}
+		}
+		else
+		{
+			ige.network.send('Notification', {data: "Waiting for at least " + (4-ige.server.numOfPlayers) + " players to join"});
 		}
 	},
 
@@ -305,16 +382,16 @@ var ServerNetworkEvents = {
 					ige.server.characterSet[0] = true;
 				}
 				break;
-			case "Mustard":
-			case "Col. Mustard":
+			case "Plum":
+			case "Prof Plum":
 				if (ige.server.characterSet[1] == false)
 				{
 					success = true;
 					ige.server.characterSet[1] = true;
 				}
 				break;
-			case "White":
-			case "Mrs. White":
+			case "Peacock":
+			case "Mrs. Peacock":
 				if (ige.server.characterSet[2] == false)
 				{
 					success = true;
@@ -329,16 +406,16 @@ var ServerNetworkEvents = {
 					ige.server.characterSet[3] = true;
 				}
 				break;
-			case "Peacock":
-			case "Mrs. Peacock":
+			case "White":
+			case "Mrs. White":
 				if (ige.server.characterSet[4] == false)
 				{
 					success = true;
 					ige.server.characterSet[4] = true;
 				}
 				break;
-			case "Plum":
-			case "Prof Plum":
+			case "Mustard":
+			case "Col. Mustard":
 				if (ige.server.characterSet[5] == false)
 				{
 					success = true;
@@ -370,6 +447,36 @@ var ServerNetworkEvents = {
 	},
 
 	_onNotification: function (cmd, data) {
+	},
+
+	_endPlayerTurn: function (data, clientId) {
+		var player = ige.server.GameBoard.allPlayers.filter(user => user.playerId == clientId)[0];
+
+		var start_index = 0;
+		var found = false;
+		// Get the next player in turn
+		for (index = 0; index < ige.server.GameBoard.activePlayers.length; index++)
+		{
+			if (ige.server.GameBoard.activePlayers[index].isActive)
+			{
+				ige.server.GameBoard.playerTurn = ige.server.GameBoard.activePlayers[index].character;
+				ige.network.send('Notification', {data: ige.server.GameBoard.playerTurn + " player Turn"});
+
+				// cutoff the array start at the player turn
+				// then concatenate to the end, so that next turn
+				// we can just iterate the array from the beginning
+				if (index != 5)
+				{
+					var cutoff = ige.server.GameBoard.activePlayers.slice(index+1);
+					ige.server.GameBoard.activePlayers.concat(cutoff);
+				}
+				break;
+			}
+		}
+
+		// reset the current player action
+        player.isMove = false;
+        player.isSuggestion= false;
 	}
 };
 

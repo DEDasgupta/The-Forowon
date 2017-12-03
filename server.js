@@ -44,11 +44,13 @@ var Server = IgeClass.extend({
 					// Check if the engine started successfully
 					if (success) {
 						//ige.chat.createRoom('The Lobby', {}, 'lobby');
-						ige.network.define('player_message', self._playerMessage)
-						ige.network.define('moveUp', self._moveUp)
-						ige.network.define('moveDown', self._moveDown)
-						ige.network.define('moveLeft', self._moveLeft)
-						ige.network.define('moveRight', self._moveRight)
+						ige.network.define('player_message', self._playerMessage);
+						ige.network.define('moveUp', self._moveUp);
+						ige.network.define('moveDown', self._moveDown);
+						ige.network.define('moveLeft', self._moveLeft);
+						ige.network.define('moveRight', self._moveRight);
+						ige.network.define('Move', self._moveRoom);
+						ige.network.define('End', self._endPlayerTurn);
 						// Create some network commands we will need
 						ige.network.define('playerEntity', self._onPlayerEntity);
 
@@ -99,13 +101,13 @@ var Server = IgeClass.extend({
 								
 						// Mustard					
 						self.playerList[1] = new Player()
-							.id('Mustard')
+							.id('Plum')
 							.streamMode(1)
 							.mount(baseScene);		
 
 						// White
 						self.playerList[2] = new Player()
-							.id('White')
+							.id('Peacock')
 							.streamMode(1)
 							.mount(baseScene);				
 
@@ -117,13 +119,13 @@ var Server = IgeClass.extend({
 
 						// Peacock
 						self.playerList[4] = new Player()
-							.id('Peacock')
+							.id('White')
 							.streamMode(1)
 							.mount(baseScene);				
 
 						// Plum
 						self.playerList[5] = new Player()
-							.id('Plum')
+							.id('Mustard')
 							.streamMode(1)
 							.mount(baseScene);
 

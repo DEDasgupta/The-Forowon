@@ -42,9 +42,10 @@ class GameBoard {
         ];
 
         // the character name must match with the server name list
+        // this is the order of the player as to the left start from Scarlet
         this.characters = [
             {name: "Miss Scarlet", position: [0, 3]},
-            {name: "Professor Plum", position: [1, 0]},
+            {name: "Prof Plum", position: [1, 0]},
             {name: "Mrs. Peacock", position: [3, 0]},
             {name: "Mr. Green", position: [4, 1]},
             {name: "Mrs. White", position: [4, 3]},
@@ -68,10 +69,11 @@ class GameBoard {
     }
 
     loadPlayers (numberOfPlayers){
-        this.shuffleArray(this.characters).forEach(function(character, index){
+        this.characters.forEach(function(character, index){
             var player = new CluelessPlayer(index, character.name, [character.position[0], character.position[1]]);
 
-            this.allPlayers.push(player);
+            this.allPlayers = this.allPlayers.concat(player);
+            this.activePlayers = this.activePlayers.concat(player);
 
             // This will be done in Server event when new player connect
             //if(index < numberOfPlayers){
@@ -125,7 +127,18 @@ class GameBoard {
         }
 
         return array;
-    }  
+    }
+
+    isPlayerAllowToMove (player) {       
+        // Player can only move is they are not moving yet and not made wrong accusation
+        if (player.character == this.playerTurn &&
+            player.isMove == false &&
+            player.isAccusation == false)
+        {
+            return true;
+        }
+        return false;
+    }
 
 }
 module.exports = GameBoard;
@@ -178,6 +191,7 @@ GameBoard.prototype.movePlayerFromRoom = function(playerId, destX, destY){
 
     //update player isInRoom
     player.isInRoom = false;
+    player.isMove = true;
     for (var i = 0; i < this.rooms.length; i++){
         if (this.rooms[i].position[0] == destX && this.rooms[i].position[1] == destY)
         {
@@ -239,4 +253,5 @@ GameBoard.prototype.movePlayerFromHall = function(playerId, destX, destY){
 
     //update player isInRoom (Can only go to room from hall)
     player.isInRoom = true;
+    player.isMove = true;
 }

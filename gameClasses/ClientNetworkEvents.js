@@ -57,6 +57,7 @@ var ClientNetworkEvents = {
 		{
 			// Ask the server to create an entity for us
 			ige.network.request('playerEntity', ige.client.clientCharacter, self.ClientNetworkEvents._onPlayerEntity);
+			ige.client.userCharacter.value("You are playing as " + ige.client.clientCharacter);
 		}
 	},
 

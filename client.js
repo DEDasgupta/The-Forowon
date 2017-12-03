@@ -130,6 +130,7 @@ var Client = IgeClass.extend({
 							'font': '12px Open Sans',
 							'color': '#000000'
 						});
+
 						ige.ui.style('#textBox1', {
 							'top': 140
 						});
@@ -149,6 +150,16 @@ var Client = IgeClass.extend({
 						});
 						ige.ui.style('#textBox3:focus', {
 							'borderColor': '#00ff00'
+						});
+
+						ige.ui.style('IgeUiLabel', {
+							'font': '16px Open Sans',
+							'color': '#ffffff'
+						});
+
+						ige.ui.style('#homeLabel', {
+							'font': '20px Open Sans',
+							'color': '#ffffff'
 						});
 
 						var topNav = new IgeUiElement()
@@ -214,7 +225,7 @@ var Client = IgeClass.extend({
 								ige.network.send('moveDown', {data:"hihi"})
 							}
 
-						this.commandText = new IgeUiTextBox()
+						self.commandText = new IgeUiTextBox()
 							.id('textBox1')
 							.value('')
 							.mount(leftNav);
@@ -230,8 +241,17 @@ var Client = IgeClass.extend({
 							.value('Send')
 							.mount(leftNav);
 							sendButton._mouseUp = function(){
-								ige.network.send(this.commandText._value, {data:"hihi"})
+								ige.network.send("Command", {data:self.commandText._value})
 							}
+
+						self.userCharacter = new IgeUiLabel()
+							.id('own')
+							.value("")
+							.width(200)
+							.height(40)
+							.left(0)
+							.top(450)
+							.mount(leftNav);
 						
 
 						// Create the main viewport and set the scene
