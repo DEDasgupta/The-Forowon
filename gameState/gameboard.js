@@ -112,6 +112,8 @@ class GameBoard {
 
         this.caseFile = new CaseFile(suspects.pop(), rooms.pop(), weapons.pop());
 
+        console.log("\nCASE FILE: ", this.caseFile.suspect + " " + this.caseFile.room + " " + this.caseFile.weapon + "\n");
+
         return this.shuffleArray(suspects.concat(rooms, weapons));
     }
 

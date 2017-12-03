@@ -148,7 +148,7 @@ var Client = IgeClass.extend({
 								value: 'Knife'
 							}, {
 								text: 'Lead Pipe',
-								value: 'LeadPipe'
+								value: 'Lead Pipe'
 							}, {
 								text: 'Revolver',
 								value: 'Revolver'
@@ -169,22 +169,22 @@ var Client = IgeClass.extend({
 							.right(10)
 							.options([{
 								text: 'Miss Scarlet',
-								value: 'MissScarlet'
+								value: 'Miss Scarlet'
 							}, {
 								text: 'Professor Plum',
-								value: 'ProfessorPlum'
+								value: 'Professor Plum'
 							}, {
 								text: 'Mrs. Peacock',
-								value: 'Mrs.Peacock'
+								value: 'Mrs. Peacock'
 							}, {
 								text: 'Mr. Green',
-								value: 'Mr.Green'
+								value: 'Mr. Green'
 							}, {
 								text: 'Mrs. White',
-								value: 'Mrs.White'
+								value: 'Mrs. White'
 							}, {
 								text: 'Col. Mustard',
-								value: 'Col.Mustard'
+								value: 'Col. Mustard'
 							}])
 							.mount(self.leftNav);
 
@@ -207,10 +207,10 @@ var Client = IgeClass.extend({
 								value: 'Library'
 							}, {
 								text: 'Billiard Room',
-								value: 'BilliardRoom'
+								value: 'Billiard Room'
 							}, {
 								text: 'Dining Room',
-								value: 'DiningRoom'
+								value: 'Dining Room'
 							}, {
 								text: 'Conservatory',
 								value: 'Conservatory'
