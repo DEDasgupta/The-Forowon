@@ -1,8 +1,8 @@
 {
 	"name": "igeServer",
 	"version": "1.1.1",
-	"author":"Irrelon Software Limited <isogenic@irrelon.com>",
-	"description":"The Isogenic Engine game server application.",
+	"author": "Irrelon Software Limited <isogenic@irrelon.com>",
+	"description": "The Isogenic Engine game server application.",
 	"contributors": [
 		{
 			"name": "Rob Evans",

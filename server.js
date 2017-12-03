@@ -12,11 +12,12 @@ var Server = IgeClass.extend({
 		// Define an object to hold references to our player entities
 		this.players = {};
 		this.playersMap = {};
+		this.playersNameMap = {}
 		this.playerList= {};
 		this.characterSet = new Array(6).fill(false);
 		this.numOfPlayers = 0;
 		this.characterShortNames = ["Scarlet", "Plum", "Peacock", "Green", "White", "Mustard"];
-		this.characterNames = ["Miss Scarlet", "Prof Plum", "Mrs. Peacock", "Mr. Green", "Mrs. White", "Col. Mustard"];
+		this.characterNames = ["Miss Scarlet", "Professor Plum", "Mrs. Peacock", "Mr. Green", "Mrs. White", "Col. Mustard"];
 
 		// Add the server-side game methods / event handlers
 		this.implement(ServerNetworkEvents);
@@ -44,23 +45,14 @@ var Server = IgeClass.extend({
 					// Check if the engine started successfully
 					if (success) {
 						//ige.chat.createRoom('The Lobby', {}, 'lobby');
-						ige.network.define('player_message', self._playerMessage);
-						ige.network.define('moveUp', self._moveUp);
-						ige.network.define('moveDown', self._moveDown);
-						ige.network.define('moveLeft', self._moveLeft);
-						ige.network.define('moveRight', self._moveRight);
-						ige.network.define('Move', self._moveRoom);
+
 						ige.network.define('End', self._endPlayerTurn);
+						ige.network.define('player_message', self._playerMessage);
+						ige.network.define('action', self._onPlayerAction);
+						ige.network.define('Prove', self._onPlayerAction);
+
 						// Create some network commands we will need
 						ige.network.define('playerEntity', self._onPlayerEntity);
-
-						ige.network.define('playerControlLeftDown', self._onPlayerLeftDown);
-						ige.network.define('playerControlRightDown', self._onPlayerRightDown);
-						ige.network.define('playerControlThrustDown', self._onPlayerThrustDown);
-
-						ige.network.define('playerControlLeftUp', self._onPlayerLeftUp);
-						ige.network.define('playerControlRightUp', self._onPlayerRightUp);
-						ige.network.define('playerControlThrustUp', self._onPlayerThrustUp);
 
 						ige.network.define('Register', self._onPlayerRegister);
 						ige.network.define('Available', self._onPlayerAvailable);
@@ -68,6 +60,7 @@ var Server = IgeClass.extend({
 						ige.network.on('connect', self._onPlayerConnect); // Defined in ./gameClasses/ServerNetworkEvents.js
 						ige.network.on('disconnect', self._onPlayerDisconnect); // Defined in ./gameClasses/ServerNetworkEvents.js
 						ige.network.define('Notification', self._onNotification);
+						ige.network.define('Alert', self._onNotification);
 
 						// Add the network stream component
 						ige.network.addComponent(IgeStreamComponent)
@@ -98,36 +91,42 @@ var Server = IgeClass.extend({
 							.id('Scarlet')
 							.streamMode(1)
 							.mount(baseScene);
+						self.playersNameMap['Scarlet'] = self.playerList[0];
 								
 						// Mustard					
 						self.playerList[1] = new Player()
 							.id('Plum')
 							.streamMode(1)
-							.mount(baseScene);		
+							.mount(baseScene);
+						self.playersNameMap['Plum'] = self.playerList[1];	
 
 						// White
 						self.playerList[2] = new Player()
 							.id('Peacock')
 							.streamMode(1)
-							.mount(baseScene);				
+							.mount(baseScene);		
+						self.playersNameMap['Peacock'] = self.playerList[2];		
 
 						// Green
 						self.playerList[3] = new Player()
 							.id('Green')
 							.streamMode(1)
-							.mount(baseScene);				
+							.mount(baseScene);		
+						self.playersNameMap['Green'] = self.playerList[3];		
 
 						// Peacock
 						self.playerList[4] = new Player()
 							.id('White')
 							.streamMode(1)
 							.mount(baseScene);				
+						self.playersNameMap['White'] = self.playerList[4];
 
 						// Plum
 						self.playerList[5] = new Player()
 							.id('Mustard')
 							.streamMode(1)
 							.mount(baseScene);
+						self.playersNameMap['Mustard'] = self.playerList[5];
 
 						// Create the scene
 						self.mainScene = new IgeScene2d()

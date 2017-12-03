@@ -356,7 +356,7 @@ var IgeNetIoServer = {
 	_onClientMessage: function (data, clientId) {
 		var ciDecoded = data[0].charCodeAt(0),
 			commandName = this._networkCommandsIndex[ciDecoded];
-
+			
 		if (this._networkCommands[commandName]) {
 			this._networkCommands[commandName](data[1], clientId);
 		}
@@ -384,6 +384,10 @@ var IgeNetIoServer = {
 		console.log('onRequest', data.cmd, [data.id, data.data]);
 		if (this._networkCommands[data.cmd]) {
 			this._networkCommands[data.cmd](data.data, clientId, data.id);
+		}
+		else
+		{
+			this._onCommandProcess(data.data, clientId);
 		}
 
 		this.emit(data.cmd, [data.id, data.data, clientId]);
@@ -433,16 +437,44 @@ var IgeNetIoServer = {
 		var cmdProcess = new String(data);
 		console.log('_onCommandProcess', cmdProcess);
 		var s = cmdProcess.split(" ");
-		console.log('_onCommandProcess', s[0]);
-		console.log('_onCommandProcess', s[1]);
+
+		debugger;
 		if (s[0] == "Register")
 		{
-
-			console.log('_onCommandProcess', "get in");
 			if (this._networkCommands[s[0]]) {
-				console.log('_onCommandProcess', "get in 2");
 				this._networkCommands[s[0]](s[1], clientId);
 			}
+		}
+
+		if (s[0].toLowerCase() == "move")
+		{
+			if (this._networkCommands[s[0]]) {
+				this._networkCommands[s[0]](s[1], clientId);
+			}
+
+			switch (s[1].toLowerCase())
+			{
+				case "up":
+					this._networkCommands['moveUp'](s[1], clientId);
+					break;
+				case "down":
+					this._networkCommands['moveDown'](s[1], clientId);
+					break;
+				case "left":
+					this._networkCommands['moveLeft'](s[1], clientId);
+					break;
+				case "right":
+					this._networkCommands['moveRight'](s[1], clientId);
+					break;
+				default:
+					this._networkCommands['moveRoom'](s[1], clientId);
+					break;
+			}
+		}
+
+		if (s[0].toLowerCase() == "end")
+		{
+			this._networkCommands['End'](data, clientId);
 		}
 	}
 };

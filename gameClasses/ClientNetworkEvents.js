@@ -7,38 +7,32 @@ var ClientNetworkEvents = {
 	 * @param data The data object that contains any data sent from the server.
 	 * @private
 	 */
-	_onPlayerEntity: function (data) {
-		if (ige.$(data)) {
-			ige.client.vp1.camera.trackTranslate(ige.$(data), 50);
-
-			// Set the time stream UI entity to monitor our player entity
-			// time stream data
-			ige.client.tsVis.monitor(ige.$(data));
-		} else {
-			// The client has not yet received the entity via the network
-			// stream so lets ask the stream to tell us when it creates a
-			// new entity and then check if that entity is the one we
-			// should be tracking!
-			var self = this;
-			self._eventListener = ige.network.stream.on('entityCreated', function (entity) {
-				if (entity.id() === data) {
-					// Tell the camera to track out player entity
-					//ige.client.vp1.camera.trackTranslate(ige.$(data), 50);
-
-					// Set the time stream UI entity to monitor our player entity
-					// time stream data
-					//ige.client.tsVis.monitor(ige.$(data));
-
-					// Turn off the listener for this event now that we
-					// have found and started tracking our player entity
-					ige.network.stream.off('entityCreated', self._eventListener, function (result) {
-						if (!result) {
-							this.log('Could not disable event listener!', 'warning');
-						}
-					});
-				}
-			});
+	_onPlayerEntity: function (cmd, data) {
+		// The client has not yet received the entity via the network
+		// stream so lets ask the stream to tell us when it creates a
+		// new entity and then check if that entity is the one we
+		// should be tracking!
+		console.log(data);
+		if (data.hand) {
+			ige.client.card1.value(data.hand[0])
+			ige.client.card2.value(data.hand[1])
+			ige.client.card3.value(data.hand[2])
 		}
+		ige.client.characterName.value(data.id);
+		var self = this;
+		self._eventListener = ige.network.stream.on('entityCreated', function (entity) {
+			if (entity.id() === data.id) {
+				
+
+				// Turn off the listener for this event now that we
+				// have found and started tracking our player entity
+				ige.network.stream.off('entityCreated', self._eventListener, function (result) {
+					if (!result) {
+						this.log('Could not disable event listener!', 'warning');
+					}
+				});
+			}
+		});
 	},
 
 	_onRegisterCharacter: function (cmd, data) {
@@ -57,13 +51,30 @@ var ClientNetworkEvents = {
 		{
 			// Ask the server to create an entity for us
 			ige.network.request('playerEntity', ige.client.clientCharacter, self.ClientNetworkEvents._onPlayerEntity);
-			ige.client.userCharacter.value("You are playing as " + ige.client.clientCharacter);
+			ige.client.characterName.value("Character: " + ige.client.clientCharacter);
 		}
 	},
 
 	_onNotification: function (cmd, data) {
-		ige.client.notificationText.value(cmd.data);
-	}
+		ige.client.turnText.value(cmd.data);
+	},
+
+	_onServerAlert: function (data) {
+		alert(data);
+	},
+
+	_onProve: function (cmd, data) {
+		var proveCard = "";
+		do {
+	    	proveCard = prompt(cmd.data);
+	    } while (proveCard ==null || proveCard == "" || proveCard == undefined);
+
+		/*Register for character name here */
+		ige.network.request('action', {
+								actionType:"prove", 
+								card: proveCard
+							}, ige.client.playerMessage);
+	},
 	
 };
 

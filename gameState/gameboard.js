@@ -1,7 +1,7 @@
 //import {CaseFile} from "./CaseFile";
 
-var CluelessPlayer = require('./CluelessPlayer');
-var CaseFile = require('./CaseFile');
+var CluelessPlayer = require("./CluelessPlayer");
+var CaseFile = require("./CaseFile");
 
 class GameBoard {
     constructor() {
@@ -13,6 +13,16 @@ class GameBoard {
             [1, 0, 0, 0, 0],
             [0, 1, 0, 1, 0]
         ];
+
+        this.roomGrid = [
+            ["Study","Hallway","Hall","Hallway","Lounge"],
+            ["Hallway","","Hallway","","Hallway"],
+            ["Library","Hallway","Billiard Room","Hallway","Dining Room"],
+            ["Hallway","","Hallway","","Hallway"],
+            ["Conservatory","Hallway","Ballroom","Hallway","Kitchen"]
+        ];
+
+        this.roomsMap = {"Study":true,"Hall":true,"Lounge":true,"Library":true,"Billiard Room":true,"Dining Room":true,"Conservatory":true,"Ballroom":true,"Kitchen":true};
 
         this.rooms = [
             {name: "Study", position: [0, 0], exits: [[0,1], [1,0], [4,4]]},
@@ -44,12 +54,12 @@ class GameBoard {
         // the character name must match with the server name list
         // this is the order of the player as to the left start from Scarlet
         this.characters = [
-            {name: "Miss Scarlet", position: [0, 3]},
-            {name: "Prof Plum", position: [1, 0]},
-            {name: "Mrs. Peacock", position: [3, 0]},
-            {name: "Mr. Green", position: [4, 1]},
-            {name: "Mrs. White", position: [4, 3]},
-            {name: "Col. Mustard", position: [1, 4]}
+            {name: "Miss Scarlet", short: "Scarlet", position: [0, 3]},
+            {name: "Professor Plum", short: "Plum", position: [1, 0]},
+            {name: "Mrs. Peacock", short: "Peacock", position: [3, 0]},
+            {name: "Mr. Green", short: "Green", position: [4, 1]},
+            {name: "Mrs. White", short: "White", position: [4, 3]},
+            {name: "Col. Mustard", short: "Mustard", position: [1, 4]}
         ];
 
         this.weapons = ["Candlestick", "Knife", "Lead Pipe", "Revolver", "Rope", "Wrench"];
@@ -61,6 +71,7 @@ class GameBoard {
         this.numberOfPlayers = 6;
 
         this.playerTurn = "";
+        this.alert = "";
 
         this.loadPlayers(this.numberOfPlayers);
         this.placeWeapons();
@@ -131,17 +142,121 @@ class GameBoard {
 
     isPlayerAllowToMove (player) {       
         // Player can only move is they are not moving yet and not made wrong accusation
-        if (player.character == this.playerTurn &&
-            player.isMove == false &&
-            player.isAccusation == false)
+        if (player.character != this.playerTurn)
         {
-            return true;
+            this.alert = "It's not your turn";
+            return false;
         }
-        return false;
+
+        if (player.isMove != false)
+        {
+            this.alert = "You already moved";
+            return false; 
+        }
+
+        if (player.isAccusation != false)
+        {
+            this.alert = "You are not allowed to move since your accusation is wrong";
+            return false; 
+        }
+        return true;
+    }
+
+    isPlayerAllowToSuggest (player) {       
+        // Player can only move is they are not moving yet and not made wrong accusation
+        if (player.character != this.playerTurn)
+        {
+            this.alert = "It's not your turn";
+            return false;
+        }
+
+        if (player.isSuggestion != false)
+        {
+            this.alert = "You already suggested";
+            return false; 
+        }
+
+        if (player.isAccusation != false)
+        {
+            this.alert = "You are not allowed to move since your accusation is wrong";
+            return false; 
+        }
+        return true;
     }
 
 }
 module.exports = GameBoard;
+
+GameBoard.prototype.validateSuggestion = function(splayer, data){
+    var suggestionCards = [data.weapon, data.room, data.suspect];
+    var part1 = splayer.character + " suggested that " + data.suspect + " used a " + data.weapon + " in the " + data.room;
+    var part2 = " and no other player can disprove this suggestion";
+    var cardFound = "";
+    var count = 0;
+    var needProve = false;
+
+    // Using activePlayers since it contains the players in order from left to right of the current user
+    for (playerIndex in this.activePlayers) {
+        var player = this.activePlayers[playerIndex];
+        if (player.playerId != splayer.playerId) {
+            for (cardIndex in player.hand) {
+                var card = player.hand[cardIndex];
+                for (scIndex in suggestionCards) {
+                    var sc = suggestionCards[scIndex];
+                    if (sc === card) {
+                        part2 = " but " + player.character + " holds the card " + card;
+                        cardFound = cardFound + card + "\n";
+                        count++;
+                    }
+                }
+            }
+        }
+
+        // We found the person has the suggested card
+        this.alert = "Please choose one of your hand cards below to show for " + splayer.character+ "'s suggestion:\n" + cardFound;
+        if(count > 0)
+        {
+            // more than 2 cards are found in the active Player
+            if (count > 1 && player.isActive)
+            {
+                // let the player decide which one they want to show
+                needProve = true;
+                //ige.network.send('Notification', {data: "Waiting for " + player.character + " to prove the suggestion"});
+                ige.network.send('Prove', {data: this.alert}, player.playerId);
+                retMessage = "Waiting for " + player.character + " to prove the suggestion";
+            }
+            else
+            {
+                retMessage = part1 + part2;
+            }
+
+            //break out of the loop, since we just need one person to prove
+            break;
+        }
+    }
+    console.log(this.activePlayers)
+    var movePlayer = this.allPlayers.filter(user => user.character == data.suspect)[0];
+    var moveRoom = this.rooms.filter(room => room.name == data.room)[0];
+    var moveChar = this.characters.filter(char => char.name == data.suspect)[0]
+    console.log(movePlayer);
+    var delta = [movePlayer.position[0]-moveRoom.position[0],movePlayer.position[1]-moveRoom.position[1]]
+    console.log(delta)
+    ige.server.playersNameMap[moveChar.short]._translate.tween().stepBy({x:delta[1]*-120,y:delta[0]*-120},1000).start();
+    this.grid[movePlayer.position[0]][movePlayer.position[1]] = 0;
+    movePlayer.position = [moveRoom.position[0],moveRoom.position[1]];
+    movePlayer.isInRoom = true;
+    
+    return retMessage
+}
+
+GameBoard.prototype.validateAccusation = function(splayer, data){
+    console.log(this.caseFile)
+    if (this.caseFile.suspect === data.suspect && this.caseFile.weapon === data.weapon && this.caseFile.room === data.room) {
+        return true;
+    }
+    return false;
+
+}
 
 GameBoard.prototype.canPlayerMoveFromRoom = function(playerId, destX, destY){
     //Outside of available spaces
@@ -152,7 +267,7 @@ GameBoard.prototype.canPlayerMoveFromRoom = function(playerId, destX, destY){
 
     var player = this.allPlayers.filter(user => user.playerId == playerId)[0];
 
-    //Player isn't even in a room
+    //Player isn"t even in a room
     if(player.isInRoom == false) return false;
 
 
@@ -165,7 +280,7 @@ GameBoard.prototype.canPlayerMoveFromRoom = function(playerId, destX, destY){
             break;
         }
     }
-    //Didn't find room in matching position.
+    //Didn"t find room in matching position.
     if(roomArray == null) return false;
 
     //Room player is standing in has an open hall or secret passage to a room
@@ -190,8 +305,14 @@ GameBoard.prototype.movePlayerFromRoom = function(playerId, destX, destY){
     player.position = [destX, destY];
 
     //update player isInRoom
-    player.isInRoom = false;
     player.isMove = true;
+
+    var newRoom = this.roomGrid[player.position[0]][player.position[1]]
+    if (this.roomsMap[newRoom]) {
+        player.isInRoom = true;
+    } else {
+        player.isInRoom = false;
+    }
     for (var i = 0; i < this.rooms.length; i++){
         if (this.rooms[i].position[0] == destX && this.rooms[i].position[1] == destY)
         {
@@ -202,7 +323,6 @@ GameBoard.prototype.movePlayerFromRoom = function(playerId, destX, destY){
 }
 
 GameBoard.prototype.canPlayerMoveFromHall= function(playerId, destX, destY){
-    debugger;
     //Outside of available spaces or space already occupied in grid
     if(destX < 0 || destX > 4 || destY < 0 || destY > 4) return false;
 
@@ -210,7 +330,7 @@ GameBoard.prototype.canPlayerMoveFromHall= function(playerId, destX, destY){
 
     var player = this.allPlayers.filter(user => user.playerId == playerId)[0];
 
-    //Player isn't even in a hall
+    //Player isn"t even in a hall
     if(player.isInRoom == true) return false;
 
     var hallArray = null;
@@ -222,7 +342,7 @@ GameBoard.prototype.canPlayerMoveFromHall= function(playerId, destX, destY){
             break;
         }
     }
-    //Didn't find room in matching position.
+    //Didn"t find room in matching position.
     if(hallArray == null) return false;
 
     //Hall player is standing in has an open room adjacent
