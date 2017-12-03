@@ -129,38 +129,13 @@ var Client = IgeClass.extend({
 						var topNav = new IgeUiElement()
 							.id('topNav')
 							.mount(self.uiScene);
-						
-						self.characterName = new IgeUiLabel()
-							.id('charText')
-							.top(0)
-							.left(15)
-							.width(150)
-							.color('#DC143C')
-							.value('Character')
-							.mount(topNav);
-						
-						self.turnText = new IgeUiLabel()
-							.id('turnText')
-							.top(0)
-							.left(240)
-							.width(1000)
-							.value('Waiting for Players')
-							.mount(topNav);
+
 						
 						self.leftNav = new IgeUiElement()
 							.id('leftNav')
 							.mount(self.uiScene);
-						
-						new IgeUiLabel()
-							.id('weaponLabel')
-							.top(10)
-							.left(10)
-							.right(10)
-							.color('#FFFFFF')
-							.value('Weapon:')
-							.mount(self.leftNav);
-							
-						var selWep = new IgeUiDropDown()
+
+							var selWep = new IgeUiDropDown()
 							.id('weaponsDropDown')
 							.top(40)
 							.left(10)
@@ -173,7 +148,7 @@ var Client = IgeClass.extend({
 								value: 'Knife'
 							}, {
 								text: 'Lead Pipe',
-								value: 'Lead Pipe'
+								value: 'LeadPipe'
 							}, {
 								text: 'Revolver',
 								value: 'Revolver'
@@ -186,14 +161,6 @@ var Client = IgeClass.extend({
 							}])
 							.mount(self.leftNav);
 
-						new IgeUiLabel()
-							.id('suspectLabel')
-							.top(80)
-							.left(10)
-							.right(10)
-							.color('#FFFFFF')
-							.value('Suspect:')
-							.mount(self.leftNav);
 
 						var selChar = new IgeUiDropDown()
 							.id('CharacterDropDown')
@@ -202,34 +169,25 @@ var Client = IgeClass.extend({
 							.right(10)
 							.options([{
 								text: 'Miss Scarlet',
-								value: 'Miss Scarlet'
+								value: 'MissScarlet'
 							}, {
 								text: 'Professor Plum',
-								value: 'Professor Plum'
+								value: 'ProfessorPlum'
 							}, {
 								text: 'Mrs. Peacock',
-								value: 'Mrs. Peacock'
+								value: 'Mrs.Peacock'
 							}, {
 								text: 'Mr. Green',
-								value: 'Mr. Green'
+								value: 'Mr.Green'
 							}, {
 								text: 'Mrs. White',
-								value: 'Mrs. White'
+								value: 'Mrs.White'
 							}, {
 								text: 'Col. Mustard',
-								value: 'Col. Mustard'
+								value: 'Col.Mustard'
 							}])
 							.mount(self.leftNav);
 
-						new IgeUiLabel()
-							.id('roomLabel')
-							.top(150)
-							.left(10)
-							.right(10)
-							.color('#FFFFFF')
-							.value('Accusation Room:')
-							.mount(self.leftNav);
-						
 						var selRoom = new IgeUiDropDown()
 							.id('RoomDropDown')
 							.top(180)
@@ -249,10 +207,10 @@ var Client = IgeClass.extend({
 								value: 'Library'
 							}, {
 								text: 'Billiard Room',
-								value: 'Billiard Room'
+								value: 'BilliardRoom'
 							}, {
 								text: 'Dining Room',
-								value: 'Dining Room'
+								value: 'DiningRoom'
 							}, {
 								text: 'Conservatory',
 								value: 'Conservatory'
@@ -263,6 +221,50 @@ var Client = IgeClass.extend({
 								text: 'Kitchen',
 								value: 'Kitchen'
 							}])
+							.mount(self.leftNav);
+						
+						self.characterName = new IgeUiLabel()
+							.id('charText')
+							.top(0)
+							.left(15)
+							.width(150)
+							.color('#DC143C')
+							.value('Character')
+							.mount(topNav);
+						
+						self.turnText = new IgeUiLabel()
+							.id('turnText')
+							.top(0)
+							.left(240)
+							.width(1000)
+							.value('Waiting for Players')
+							.mount(topNav);
+						
+						new IgeUiLabel()
+							.id('weaponLabel')
+							.top(10)
+							.left(10)
+							.right(10)
+							.color('#FFFFFF')
+							.value('Weapon:')
+							.mount(self.leftNav);
+
+						new IgeUiLabel()
+							.id('suspectLabel')
+							.top(80)
+							.left(10)
+							.right(10)
+							.color('#FFFFFF')
+							.value('Suspect:')
+							.mount(self.leftNav);
+
+						new IgeUiLabel()
+							.id('roomLabel')
+							.top(150)
+							.left(10)
+							.right(10)
+							.color('#FFFFFF')
+							.value('Accusation Room:')
 							.mount(self.leftNav);
 
 						/* This Button send the command to the server */
