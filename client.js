@@ -280,7 +280,7 @@ var Client = IgeClass.extend({
 								actionType:"suggest", 
 								suspect: selChar._value.value, 
 								weapon: selWep._value.value
-							}, this.playerMessage)
+							}, self.playerMessage)
 						}
 
 						var accuseButton = new IgeUiButton()
@@ -298,7 +298,7 @@ var Client = IgeClass.extend({
 								suspect: selChar._value.value, 
 								weapon: selWep._value.value,
 								room: selRoom._value.value
-							}, this.playerMessage)
+							}, self.playerMessage)
 						}
 
 

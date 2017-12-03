@@ -162,26 +162,20 @@ class GameBoard {
         return true;
     }
 
-    isPlayerAllowToSuggest (player) {       
+    isPlayerAllowToSuggest (player) {  
+        var ret = {valid: true,  message: ""}
         // Player can only move is they are not moving yet and not made wrong accusation
-        if (player.character != this.playerTurn)
-        {
-            this.alert = "It's not your turn";
-            return false;
+        if (player.character != this.playerTurn){
+            ret.valid = false
+            ret.message = "It's not your turn";
+        }else if (player.isSuggestion != false){
+            ret.valid = false
+            ret.message = "You already suggested";
+        } else if (player.isAccusation != false){
+            ret.valid = false
+            ret.message = "You are not allowed to move since your accusation is wrong";
         }
-
-        if (player.isSuggestion != false)
-        {
-            this.alert = "You already suggested";
-            return false; 
-        }
-
-        if (player.isAccusation != false)
-        {
-            this.alert = "You are not allowed to move since your accusation is wrong";
-            return false; 
-        }
-        return true;
+        return ret;
     }
 
 }

@@ -245,9 +245,8 @@ var actions = {
 		var result = {valid:false, message:"you are not in a room"};
 		var room = ige.server.GameBoard.roomGrid[player.position[0]][player.position[1]]
 		data.room = room;
-
-		if (ige.server.GameBoard.isPlayerAllowToSuggest(player)) 
-		{
+		var allowed = ige.server.GameBoard.isPlayerAllowToSuggest(player)
+		if (allowed.valid) {
 			if (player.isInRoom) {
 				player.isSuggestion = true;
 				result.valid = true;
@@ -258,9 +257,8 @@ var actions = {
 				ige.network.send('Notification', {data: player.character + " suggested that " + data.suspect + " used a " + data.weapon + " in the " + data.room});
 			}
 		}
-		else
-		{
-			result.message = ige.server.GameBoard.alert;
+		else {
+			result.message = allowed.message;
 		}
 		ige.network.response(requestId, result);
 	},
