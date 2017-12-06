@@ -64,8 +64,8 @@ class GameBoard {
 
         this.weapons = ["Candlestick", "Knife", "Lead Pipe", "Revolver", "Rope", "Wrench"];
 
-        this.allPlayers = new Array();
-        this.activePlayers = new Array();
+        this.allPlayers = new Array(6);
+        this.activePlayers = new Array(6);
 
         this.caseFile = null;
         this.numberOfPlayers = 6;
@@ -83,14 +83,16 @@ class GameBoard {
         this.characters.forEach(function(character, index){
             var player = new CluelessPlayer(index, character.name, [character.position[0], character.position[1]]);
 
-            this.allPlayers = this.allPlayers.concat(player);
-            this.activePlayers = this.activePlayers.concat(player);
-
+            this.allPlayers[index] = player;
+            this.activePlayers[index] = player;
+            
             // This will be done in Server event when new player connect
             //if(index < numberOfPlayers){
             //    this.activePlayers.push(player);
             //}
         }, this);
+        console.log("Active Players")
+        console.log(this.activePlayers)
     }
 
     //Add a weapon property to each room

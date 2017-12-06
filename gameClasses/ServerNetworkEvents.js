@@ -303,7 +303,7 @@ var actions = {
         if (message != "")
         {
             ige.server.GameBoard.alert = message;
-			ige.network.send('Alert', ige.server.GameBoard.alert);
+			ige.network.send('Alert', message);
         }
         else
         {
@@ -314,21 +314,22 @@ var actions = {
 
 	_endTurn: function (data, clientId, requestId) {
 		var player = ige.server.GameBoard.allPlayers.filter(user => user.playerId == clientId)[0];
-		var result = {valid:true, message:""};
+		var result = {valid:false, message:"It is not your turn"};
 		
 		var start_index = 0;
 		var found = false;
 		if (player.character == ige.server.GameBoard.playerTurn) 
 		{
+			result.valid = true;
+			console.log("active players")
+			console.log(ige.server.GameBoard.activePlayers)
 			// Get the next player in turn
 			for (index = 0; index < ige.server.GameBoard.activePlayers.length; index++)
 			{
 				// Ensure the player still active and they has not accused anyone yet
 				var currentPlayer = ige.server.GameBoard.activePlayers.shift();
-
-				if (currentPlayer.isActive &&
-					!currentPlayer.isAccusation)
-				{
+				//console.log(currentPlayer)
+				if (currentPlayer.isActive && !currentPlayer.isAccusation) {
 					ige.server.GameBoard.playerTurn = currentPlayer.character;
 					ige.network.send('Notification', {data: ige.server.GameBoard.playerTurn + " player Turn"});
 
@@ -337,9 +338,7 @@ var actions = {
 					// we can just iterate the array from the beginning
 					ige.server.GameBoard.activePlayers = ige.server.GameBoard.activePlayers.concat(currentPlayer);
 					break;
-				}
-				else
-				{
+				} else {
 					// cutoff the array start at the player turn
 					// then concatenate to the end, so that next turn
 					// we can just iterate the array from the beginning
@@ -449,16 +448,18 @@ var ServerNetworkEvents = {
 
 		// repeat the search again which is different since the allPlayers is shuffle while
 		// the player list is not
+		console.log("character initialized")
 		for (index = 0; index < 6; index++)
 		{
 			if (identity == ige.server.GameBoard.allPlayers[index].character)
 			{
-
+				console.log(index)
 				// save the ID to gameboard and active player
 				ige.server.GameBoard.allPlayers[index].playerId = clientId;
 				//ige.server.GameBoard.activePlayers.push(ige.server.GameBoard.allPlayers[index]);
-				ige.server.GameBoard.activePlayers[index].isActive = true;
+				ige.server.GameBoard.allPlayers[index].isActive = true;
 				response.hand = ige.server.GameBoard.allPlayers[index].hand;
+				console.log(ige.server.GameBoard.allPlayers[index])
 				break;
 			}
 		}
