@@ -111,7 +111,7 @@ class GameBoard {
         weapons = this.shuffleArray(weapons);
 
         this.caseFile = new CaseFile(suspects.pop(), rooms.pop(), weapons.pop());
-
+        console.log(this.caseFile);
         return this.shuffleArray(suspects.concat(rooms, weapons));
     }
 
@@ -188,6 +188,7 @@ GameBoard.prototype.validateSuggestion = function(splayer, data){
     var cardFound = "";
     var count = 0;
     var needProve = false;
+    var retMessage = part1 + part2
 
     // Using activePlayers since it contains the players in order from left to right of the current user
     for (playerIndex in this.activePlayers) {
@@ -226,6 +227,8 @@ GameBoard.prototype.validateSuggestion = function(splayer, data){
 
             //break out of the loop, since we just need one person to prove
             break;
+        } else {
+            retMessage = part1 + part2;
         }
     }
     console.log(this.activePlayers)
